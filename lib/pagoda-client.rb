@@ -1,4 +1,4 @@
-Dir[File.join(".", "**/*.rb")].each { |f| require f; puts f }
+Dir[File.join(".", "**/*.rb")].each { |f| print require f; puts f}
 
 
 module Pagoda

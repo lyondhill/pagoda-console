@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "pagoda-client/version"
 
 Gem::Specification.new do |s|
-  s.name        = "pagoda"
+  s.name        = "pagoda-client"
   s.version     = Pagoda::VERSION
   s.authors     = ["Lyon"]
   s.email       = ["lyon@delorum.com"]
