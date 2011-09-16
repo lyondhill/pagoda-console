@@ -1,4 +1,5 @@
 require 'pagoda-client'
+require 'iniparse'
 
 module Pagoda
   module Command
@@ -7,7 +8,7 @@ module Pagoda
       include Pagoda::Helpers
       
       def client
-        @client ||= Pagoda::Client.new(Pagoda::Auth.credentials)
+        @client ||= Pagoda::Client.new(Pagoda::Auth.credentials[0], Pagoda::Auth.credentials[1])
       end
       
       
@@ -154,6 +155,18 @@ module Pagoda
         parent = dir.split('/')[0..-2].join('/')
         return false if parent.empty?
         locate_app_root(parent)
+      end
+
+      def loop_transaction(app_name = nil)
+        finished = false
+        until finished
+          display ".", false, 0
+          sleep 1
+          if client.app_info(app_name || app)[:transactions].count < 1
+            finished = true
+            display
+          end
+        end
       end
 
       # def extract_option(options, default=true)
