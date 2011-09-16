@@ -1,4 +1,4 @@
-require 'pagoda-client/helpers'
+require 'pagoda/helpers'
 
 module Pagoda
   class Auth

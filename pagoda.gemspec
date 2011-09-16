@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "pagoda-client/version"
+require "pagoda/version"
 
 Gem::Specification.new do |s|
-  s.name        = "pagoda-client"
+  s.name        = "pagoda"
   s.version     = Pagoda::VERSION
   s.authors     = ["Lyon"]
   s.email       = ["lyon@delorum.com"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{getoutahere}
   s.description = %q{imnotfinishedyet}
 
-  s.rubyforge_project = "pagoda-client"
+  s.rubyforge_project = "pagoda"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'pagoda-client'
+require 'pagoda'
 
 command = ARGV.shift.strip rescue 'help'
 Pagoda::Runner.go(command, ARGV.dup)
