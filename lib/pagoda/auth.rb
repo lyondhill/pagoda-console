@@ -8,11 +8,11 @@ module Pagoda
     class << self
 
 
-      def init
-        client = Pagoda::Client.new(user, password)
-        client.on_warning { |message| self.display("\n#{message}\n\n") }
-        client
-      end
+      # def init
+      #   client = Pagoda::Client.new(user, password)
+      #   client.on_warning { |message| self.display("\n#{message}\n\n") }
+      #   client
+      # end
 
       def check_for_credentials
         if option_value("-u", "--username") && option_value("-p", "--password")
@@ -85,11 +85,11 @@ module Pagoda
       def save_credentials(cred)
         begin
           write_credentials(cred)
-          init.poke
-        rescue RestClient::Unauthorized => e
-          delete_credentials
-          error "Authentication failed"
-          raise e unless retry_login?
+          # init.poke
+        # rescue RestClient::Unauthorized => e
+        #   delete_credentials
+        #   error "Authentication failed"
+        #   raise e unless retry_login?
 
         rescue Exception => e
           delete_credentials

@@ -11,34 +11,45 @@ module Pagoda
         
         def go(command, args, retries=0)
           begin
-            Pagoda::Auth.init
+            Pagoda::Auth.credentials
+            puts "auth over"
             run_internal(command, args.dup)
+            puts "run interval workddon"
           rescue InvalidCommand
             error "Unknown command: #{command}. Run 'pagoda help' for usage information."
           rescue RestClient::Unauthorized
+            puts "restclient unauth"
             if retries < 3
               STDERR.puts "Authentication failure"
-              run(command, args, retries+1)
+              go(command, args, retries+1)
             else
               error "Authentication failure"
             end
           rescue RestClient::ResourceNotFound => e
+            puts "restclient notfound"
             error extract_not_found(e.http_body)
           rescue RestClient::RequestFailed => e
+            puts "restclient requestFailed"
             error extract_error(e.http_body) unless e.http_code == 402 || e.http_code == 102
           rescue RestClient::RequestTimeout
+            puts "restclient requesttimeout"
             error "API request timed out. Please try again, or contact support@pagodagrid.com if this issue persists."
           # rescue CommandFailed => e
           #   error e.message
           rescue Interrupt => e
+            puts "INterput"
             error "\n[canceled]"
           end
         end
 
         def run_internal(command, args)
+          puts "in run #{command} - #{args}"
           klass, method = parse(command)
+          puts "in run - parse returned"
           runner = klass.new(args)
+          puts "in run - created class"
           raise InvalidCommand unless runner.respond_to?(method)
+          puts "in run - going to run #{method}"
           runner.send(method)
         end
 
