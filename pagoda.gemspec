@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
 
   
   s.add_dependency "rest-client"
+  s.add_dependency "pagoda-client"
   s.add_dependency "json_pure"
   s.add_dependency "iniparse"
   
