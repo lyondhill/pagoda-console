@@ -1,0 +1,66 @@
+require 'spec_helper'
+require 'fakefs'
+
+
+describe Pagoda::Auth do
+  
+  it "only allows 3 attempts" do
+    Pagoda::Auth.retry_login?.should == true
+    Pagoda::Auth.retry_login?.should == true
+    Pagoda::Auth.retry_login?.should == false
+  end
+
+  it "checks the args for possible Username or Passwords" do
+    Pagoda::Auth.check_for_credentials.should == false
+    ARGV = ["-u", "username", "--password=passw0rd"]
+    Pagoda::Auth.check_for_credentials.should == ["username", "passw0rd"]
+  end
+
+  it "seperate out user from credentials" do
+    Pagoda::Auth.stub(:credentials).and_return(['User', 'passw0rd'])
+    Pagoda::Auth.user.should == "User"
+  end
+
+  it "seperate out password from credentials" do
+    Pagoda::Auth.stub(:credentials).and_return(['User', 'passw0rd'])
+    Pagoda::Auth.password.should == "passw0rd"
+  end
+
+  it "should correctly hit each function in credentials" do
+    Pagoda::Auth.should_receive(:check_for_credentials).once.and_return(false)
+    Pagoda::Auth.should_receive(:read_credentials).once.and_return(false)
+    Pagoda::Auth.should_receive(:ask_for_credentials).once.and_return(["use","pas"])
+    Pagoda::Auth.should_receive(:save_credentials).once.with(["use","pas"])
+    Pagoda::Auth.credentials
+  end
+
+  it "writes credentials to the .pagoda/credentails file" do
+    Pagoda::Auth.stub(:set_credentials_permissions)
+    FakeFS do
+      Pagoda::Auth.write_credentials(["username", "password"])
+      File.exists?("#{ENV['HOME']}/.pagoda/credentials").should == true
+    end
+  end
+
+  it "should be able to read credentials from file" do
+    FakeFS do
+      Pagoda::Auth.read_credentials.should == ["username", "password"]
+    end
+  end
+
+  it "deletes credential files" do
+    FakeFS do
+      Pagoda::Auth.delete_credentials
+      File.exists?("#{ENV['HOME']}/.pagoda/credentials").should == false
+    end
+  end
+
+  it "should return false if credentials dont exist on the machine" do
+    FakeFS do
+      Pagoda::Auth.read_credentials.should == false
+    end
+  end
+
+
+
+end

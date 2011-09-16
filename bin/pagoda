@@ -2,8 +2,5 @@
 
 require 'pagoda-client'
 
-args = ARGV.dup
-ARGV.clear
-command = args.shift.strip rescue 'help'
-
-Pagoda::Runner.go(command, args)
+command = ARGV.shift.strip rescue 'help'
+Pagoda::Runner.go(command, ARGV.dup)

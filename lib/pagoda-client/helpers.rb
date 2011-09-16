@@ -29,13 +29,13 @@ module Pagoda
       value = nil
       
       if short_hand
-        if args.include?(short_hand)
-          value = args[args.index(short_hand) + 1]
+        if ARGV.include?(short_hand)
+          value = ARGV[ARGV.index(short_hand) + 1]
           match = true
         end
       end
       if long_hand && !match
-        if match = args.grep(/#{long_hand}.*/).first
+        if match = ARGV.grep(/#{long_hand}.*/).first
           if match.include? "="
             value = match.split("=").last
           else
@@ -54,11 +54,11 @@ module Pagoda
 
     def ask(message=nil, level=1)
       display("#{message}", false, level) if message
-      gets.strip
+      STDIN.gets.strip
     end
     
     def confirm(message="Are you sure you wish to continue? (y/n)?", level=1)
-      return true if args.include? "-f"
+      return true if ARGV.include? "-f"
       case message
       when Array
         count = message.length
