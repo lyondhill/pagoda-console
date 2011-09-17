@@ -29,7 +29,7 @@ module Pagoda
           rescue RestClient::RequestTimeout
             error "API request timed out. Please try again, or contact support@pagodagrid.com if this issue persists."
           # rescue CommandFailed => e
-          #   error e.message
+            # error e.message
           rescue Interrupt => e
             error "\n[canceled]"
           end
@@ -83,10 +83,14 @@ module Pagoda
           json['error']
         rescue JSON::ParserError
         end
+
+
+
+        
       end
       
 
 
-    
+      
   end  
 end

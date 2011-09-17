@@ -5,7 +5,7 @@ module Pagoda::Command
 
     def list
       apps = client.app_list
-      if !apps.empty?
+      unless apps.empty?
         display
         display "APPS"
         display "//////////////////////////////////"
@@ -33,7 +33,7 @@ module Pagoda::Command
       display  
       display "collaborators"
       if info[:collaborators].any?
-        info[:collaborators].each_with_index do |collaborator, index|
+        info[:collaborators].each do |collaborator|
           display "username :  #{collaborator[:username]}", true, 2
           display "email    :  #{collaborator[:email]}", true, 2
         end
@@ -67,10 +67,10 @@ module Pagoda::Command
       
       display
       display "+> Registering #{name}"
-      app = client.app_create(name, clone_url)
+      client.app_create(name, clone_url)
       display "+> Launching...", false
       loop_transaction(name)
-      add_app(name, clone_url)
+      write_app(name, clone_url)
       display "+> #{name} launched"
       
       unless option_value(nil, "--latest")
@@ -96,16 +96,15 @@ module Pagoda::Command
     def deploy
       app
       display
-      branch = parse_branch
-      commit = parse_commit
       if option_value(nil, "--latest")
+        puts "got options"
         client.app_deploy_latest(app)
         display "+> deploying to latest commit point on github...", false
         loop_transaction
         display "+> deployed"
         display
       else
-        client.app_deploy(app, branch, commit)
+        client.app_deploy(app, parse_branch, parse_commit)
         display "+> deploying current branch and commit...", false
         loop_transaction
         display "+> deployed"
@@ -149,8 +148,6 @@ module Pagoda::Command
       display
     end
     alias :delete :destroy
-
-
 
     def pair
       if app_name = app(true)
@@ -217,7 +214,7 @@ module Pagoda::Command
         error "Current git repo doesn't match any launched app repos"
       end
     end
-  
+    
     def unpair
       app
       display
@@ -227,26 +224,6 @@ module Pagoda::Command
       display
     end
   
-    def deploy
-      app
-      display
-      branch = parse_branch
-      commit = parse_commit
-      if option_value(nil, "--latest")
-        client.deploy_latest(app)
-        display "+> deploying to latest commit point on github...", false
-        loop_transaction
-        display "+> deployed"
-        display
-      else
-        client.deploy(app, branch, commit)
-        display "+> deploying current branch and commit...", false
-        loop_transaction
-        display "+> deployed"
-        display
-      end
-    end
-
   protected
     
     def pair_with_remote(app)
@@ -268,4 +245,3 @@ module Pagoda::Command
   end
   
 end
-

@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'fakefs'
 
-
 describe Pagoda::Auth do
   
   it "only allows 3 attempts" do
@@ -12,7 +11,7 @@ describe Pagoda::Auth do
 
   it "checks the args for possible Username or Passwords" do
     Pagoda::Auth.check_for_credentials.should == false
-    ARGV = ["-u", "username", "--password=passw0rd"]
+    silently {ARGV = ["-u", "username", "--password=passw0rd"]} # Stupid Warning
     Pagoda::Auth.check_for_credentials.should == ["username", "passw0rd"]
   end
 

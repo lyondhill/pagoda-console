@@ -7,6 +7,13 @@ module Pagoda
     class Base
       include Pagoda::Helpers
       
+      attr_reader :client
+      attr_accessor :args
+
+      def initialize(args)
+        @args = args
+      end
+
       def client
         @client ||= Pagoda::Client.new(Pagoda::Auth.credentials[0], Pagoda::Auth.credentials[1])
       end
@@ -133,7 +140,7 @@ module Pagoda
       end
       
       def extract_possible_name
-        cleanup_name(extract_git_clone_url.split(":")[1].split("/")[1].split(".")[0])
+        cleanup_name(extract_git_clone_url.split("/").last.split(".").first)
       end
       
       def cleanup_name(name)
