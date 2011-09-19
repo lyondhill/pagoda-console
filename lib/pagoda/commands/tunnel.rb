@@ -8,10 +8,12 @@ module Pagoda::Command
     end
 
     def mysql
+      puts "tunnel : mysql"
       instance_name = option_value("-n", "--name")
       unless instance_name
         # try to find mysql instances here
         dbs = client.database_list(app)
+        puts "shouldnt make it here"
         if dbs.length == 0
           errors = []
           errors << "It looks like you don't have any MySQL instances for #{app}"

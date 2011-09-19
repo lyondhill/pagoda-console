@@ -11,7 +11,9 @@ module Pagoda
         
         def go(command, args, retries=0)
           begin
+            puts "begin"
             Pagoda::Auth.credentials
+            puts "creds"
             run_internal(command, args.dup)
           rescue InvalidCommand
             error "Unknown command: #{command}. Run 'pagoda help' for usage information."
@@ -36,16 +38,21 @@ module Pagoda
         end
 
         def run_internal(command, args)
+          puts "running"
           klass, method = parse(command)
+          puts "parsed"
           runner = klass.new(args)
+          puts "instantiate"
           raise InvalidCommand unless runner.respond_to?(method)
           runner.send(method)
         end
 
         def parse(command)
+          puts "in parse"
           parts = command.split(':')
           case parts.size
             when 1
+              puts "only one"
               begin
                 return eval("Pagoda::Command::#{command.capitalize}"), :index
               rescue NameError, NoMethodError
@@ -53,6 +60,7 @@ module Pagoda
               end
             else
               begin
+                puts "more then 1"
                 const = Pagoda::Command
                 command = parts.pop
                 parts.each { |part| const = const.const_get(part.capitalize) }
