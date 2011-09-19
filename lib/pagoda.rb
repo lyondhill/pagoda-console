@@ -7,6 +7,7 @@ require 'pagoda/runner'
 require 'pagoda/commands/base'
 require 'pagoda/commands/app'
 require 'pagoda/commands/mysql'
+require 'pagoda/commands/tunnel'
 
 module Pagoda
 

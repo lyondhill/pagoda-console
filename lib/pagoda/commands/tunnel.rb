@@ -1,3 +1,5 @@
+require 'pagoda-tunnel'
+
 module Pagoda::Command
   class Tunnel < Base
 
@@ -7,13 +9,19 @@ module Pagoda::Command
       Pagoda::Command.run_internal("tunnel:#{type}", args)
     end
 
+    def user
+      Pagoda::Auth.user
+    end
+
+    def password
+      Pagoda::Auth.password
+    end
+
     def mysql
-      puts "tunnel : mysql"
       instance_name = option_value("-n", "--name")
       unless instance_name
         # try to find mysql instances here
         dbs = client.database_list(app)
-        puts "shouldnt make it here"
         if dbs.length == 0
           errors = []
           errors << "It looks like you don't have any MySQL instances for #{app}"
@@ -39,6 +47,7 @@ module Pagoda::Command
       display "+> Authenticating Database Ownership"
       
       if client.database_exists?(app, instance_name)
+        puts "user => #{user}, password: #{password}, app: #{app}, instance: #{instance_name}"
         Pagoda::Tunnel.new(:mysql, user, password, app, instance_name).start
       else
         errors = []

@@ -15,7 +15,7 @@ module Pagoda
       end
 
       def client
-        @client ||= Pagoda::Client.new(Pagoda::Auth.credentials[0], Pagoda::Auth.credentials[1])
+        @client ||= Pagoda::Client.new(Pagoda::Auth.user, Pagoda::Auth.password)
       end
       
       
