@@ -1,6 +1,5 @@
 require 'bundler/setup'
 # require 'fakefs'
-
 require 'pagoda'
 
 def silently(&block)

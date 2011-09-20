@@ -93,17 +93,17 @@ module Pagoda
       exit 1 if exit
     end
     
-    def loop_transaction(app_name = nil)
-      finished = false
-      until finished
-        display ".", false, 0
-        sleep 1
-        if client.app_info(app_name || app)[:transactions].count < 1
-          finished = true
-          display
-        end
-      end
-    end
+    # def loop_transaction(app_name = nil)
+    #   finished = false
+    #   until finished
+    #     display ".", false, 0
+    #     sleep 1
+    #     if client.app_info(app_name || app)[:transactions].count < 1
+    #       finished = true
+    #       display
+    #     end
+    #   end
+    # end
     
     def build_indent(level=1)
       indent = ""

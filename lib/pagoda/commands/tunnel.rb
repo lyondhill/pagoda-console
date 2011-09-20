@@ -6,7 +6,7 @@ module Pagoda::Command
     def index
       app
       type = option_value("-t", "--type") || 'mysql'
-      Pagoda::Command.run_internal("tunnel:#{type}", args)
+      Pagoda::Runner.run_internal("tunnel:#{type}", args)
     end
 
     def user
@@ -18,6 +18,7 @@ module Pagoda::Command
     end
 
     def mysql
+      puts ARGV
       instance_name = option_value("-n", "--name")
       unless instance_name
         # try to find mysql instances here
@@ -47,7 +48,6 @@ module Pagoda::Command
       display "+> Authenticating Database Ownership"
       
       if client.database_exists?(app, instance_name)
-        puts "user => #{user}, password: #{password}, app: #{app}, instance: #{instance_name}"
         Pagoda::Tunnel.new(:mysql, user, password, app, instance_name).start
       else
         errors = []
