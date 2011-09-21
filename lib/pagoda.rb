@@ -8,6 +8,7 @@ require 'pagoda/commands/base'
 require 'pagoda/commands/app'
 require 'pagoda/commands/mysql'
 require 'pagoda/commands/tunnel'
+require 'pagoda/commands/credentials'
 
 module Pagoda
 

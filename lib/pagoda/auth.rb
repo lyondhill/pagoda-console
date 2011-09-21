@@ -14,6 +14,16 @@ module Pagoda
       #   client
       # end
 
+      def validate
+        credentials
+        # \/ this will go in once the api is in place
+        # cli = Pagoda::Client.new(user, password)
+        # until cli.valid_credentials? 
+        #   delete_credentials
+        #   error ["Authentication failed"]
+        # end
+      end
+
       def check_for_credentials
         if option_value("-u", "--username") && option_value("-p", "--password")
           [option_value("-u", "--username"), option_value("-p", "--password")]
@@ -88,7 +98,8 @@ module Pagoda
           cli.app_list
           write_credentials(cred)
         rescue Exception => e
-          error "Authentication failed"        
+          puts e.message
+          error ["Authentication failed"]
         end
       end
 

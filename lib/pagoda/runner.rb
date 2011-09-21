@@ -11,7 +11,7 @@ module Pagoda
         
         def go(command, args, retries=0)
           begin
-            Pagoda::Auth.credentials
+            Pagoda::Auth.validate
             run_internal(command, args.dup)
           rescue InvalidCommand
             error "Unknown command: #{command}. Run 'pagoda help' for usage information."
