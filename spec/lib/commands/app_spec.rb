@@ -92,9 +92,5 @@ describe Pagoda::Command::App do
 
   end
 
-  
-
-
-
 
 end

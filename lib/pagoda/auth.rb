@@ -83,17 +83,12 @@ module Pagoda
       end
 
       def save_credentials(cred)
+        cli = Pagoda::Client.new(cred[0],cred[1])
         begin
+          cli.app_list
           write_credentials(cred)
-          # init.poke
-        # rescue RestClient::Unauthorized => e
-        #   delete_credentials
-        #   error "Authentication failed"
-        #   raise e unless retry_login?
-
         rescue Exception => e
-          delete_credentials
-          raise e
+          error "Authentication failed"        
         end
       end
 

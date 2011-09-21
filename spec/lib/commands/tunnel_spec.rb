@@ -12,12 +12,10 @@ describe Pagoda::Command::Tunnel do
   end
 
   it "should be able to retrieve the user name and password" do
-    ARGV.clear
-    hold = Pagoda::Auth.credentials
-    Pagoda::Auth.save_credentials(['user','password'])
+    Pagoda::Auth.stub(:user).and_return("user")
+    Pagoda::Auth.stub(:password).and_return("password")
     @tunnel.user.should == "user"
     @tunnel.password.should == "password"
-    Pagoda::Auth.save_credentials(hold)
   end
 
   it "should error out if there are no databases" do

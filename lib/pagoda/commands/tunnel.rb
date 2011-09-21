@@ -18,7 +18,6 @@ module Pagoda::Command
     end
 
     def mysql
-      puts ARGV
       instance_name = option_value("-n", "--name")
       unless instance_name
         # try to find mysql instances here

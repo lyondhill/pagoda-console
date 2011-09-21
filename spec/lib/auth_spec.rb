@@ -41,6 +41,22 @@ describe Pagoda::Auth do
     end
   end
 
+  it "should error out if credetials are not valid" do
+    c = Pagoda::Client.new(nil,nil)
+    c.stub(:app_list).and_raise("AUTHINGACTION FALIED YOU NUB")
+    Pagoda::Client.stub(:new).and_return(c)
+    Pagoda::Auth.should_receive(:error).with("Authentication failed")
+    Pagoda::Auth.save_credentials(["baduser","password"])
+  end
+
+  it "should write credentials if they are valid" do
+    c = Pagoda::Client.new(nil,nil)
+    c.stub(:app_list).and_return({:appnamesmeothing => "somethingelse"})
+    Pagoda::Client.stub(:new).and_return(c)
+    Pagoda::Auth.should_receive(:write_credentials).with(["baduser","password"])
+    Pagoda::Auth.save_credentials(["baduser","password"])
+  end
+
   it "should be able to read credentials from file" do
     FakeFS do
       Pagoda::Auth.read_credentials.should == ["username", "password"]

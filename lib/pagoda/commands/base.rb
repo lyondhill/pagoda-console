@@ -5,6 +5,7 @@ module Pagoda
   module Command
 
     class Base
+      GIT_REGEX = /^((git@github.com:)|(.*:)|((http|https):\/\/.*github.com\/)|(git:\/\/github.com\/))(.*)\/(.*).git$/i
       include Pagoda::Helpers
       
       attr_reader :client
@@ -17,7 +18,6 @@ module Pagoda
       def client
         @client ||= Pagoda::Client.new(Pagoda::Auth.user, Pagoda::Auth.password)
       end
-      
       
       def shell(cmd)
         FileUtils.cd(Dir.pwd) {|d| return `#{cmd}`}
@@ -100,7 +100,7 @@ module Pagoda
       
       def read_apps
         return [] if !File.exists?(apps_file)
-        File.read(apps_file).split(/\n/).inject([]) {|apps, line| apps << line if line.include?("git@github.com"); apps}
+        File.read(apps_file).split(/\n/).inject([]) {|apps, line| apps << line if line.include?("github.com"); apps}
       end
       
       def write_app(name, git_url=nil, app_root=nil)
@@ -150,7 +150,7 @@ module Pagoda
       def extract_git_clone_url(soft=false)
         begin
           url = IniParse.parse( File.read("#{locate_app_root}/.git/config") )['remote "origin"']["url"]
-          raise unless url.match(/^((git@github.com:)|(.*:)|((http|https):\/\/.*github.com\/)|(git:\/\/github.com\/))(.*)\/(.*).git$/i)
+          raise unless url.match(GIT_REGEX)
           url
         rescue Exception => e
           return false
