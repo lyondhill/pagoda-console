@@ -45,7 +45,7 @@ describe Pagoda::Auth do
     c = Pagoda::Client.new(nil,nil)
     c.stub(:app_list).and_raise("AUTHINGACTION FALIED YOU NUB")
     Pagoda::Client.stub(:new).and_return(c)
-    Pagoda::Auth.should_receive(:error).with("Authentication failed")
+    Pagoda::Auth.should_receive(:error).with(["Authentication failed"])
     Pagoda::Auth.save_credentials(["baduser","password"])
   end
 
