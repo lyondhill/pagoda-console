@@ -128,10 +128,12 @@ module Pagoda
 
       def echo_off
         system "stty -echo"
+      rescue
       end
 
       def echo_on
         system "stty echo"
+      rescue
       end
 
     end
