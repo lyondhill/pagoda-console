@@ -87,7 +87,7 @@ module Pagoda
           (running_on_windows?) ? STDERR.puts("#{indent}** #{m}") : STDERR.puts("#{indent}** #{m}".red)
         end
       when String
-        (running_on_windows?) ? STDERR.puts("#{indent}** Error:") : STDERR.puts("#{indent}** Error:".red)
+        (running_on_windows?) ? STDERR.puts("#{indent}** Error: #{msg}") : STDERR.puts("#{indent}** Error: #{msg}".red)
       end
       STDERR.puts
       exit 1 if exit

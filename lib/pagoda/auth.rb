@@ -7,21 +7,15 @@ module Pagoda
 
     class << self
 
-
-      # def init
-      #   client = Pagoda::Client.new(user, password)
-      #   client.on_warning { |message| self.display("\n#{message}\n\n") }
-      #   client
-      # end
-
-      def validate
-        credentials
+      def validate(cred)
         # \/ this will go in once the api is in place
-        # cli = Pagoda::Client.new(user, password)
-        # until cli.valid_credentials? 
-        #   delete_credentials
-        #   error ["Authentication failed"]
-        # end
+        cli = Pagoda::Client.new(cred[0], cred[1])
+        if cli.valid_credentials? 
+          true
+        else
+          error ["Authentication failed"]
+        end
+
       end
 
       def check_for_credentials
@@ -93,14 +87,8 @@ module Pagoda
       end
 
       def save_credentials(cred)
-        cli = Pagoda::Client.new(cred[0],cred[1])
-        begin
-          cli.app_list
-          write_credentials(cred)
-        rescue Exception => e
-          puts e.message
-          error ["Authentication failed"]
-        end
+        validate(cred)
+        write_credentials(cred)
       end
 
       def retry_login?

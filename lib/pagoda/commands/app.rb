@@ -1,3 +1,5 @@
+require 'launchy'
+
 module Pagoda::Command
 
   class App < Base
@@ -18,6 +20,7 @@ module Pagoda::Command
       end
       display
     end
+    alias :index :list
 
     def info
       display
@@ -43,6 +46,16 @@ module Pagoda::Command
       display
     end
 
+    def open
+      display "Opening #{app}"
+      Launchy.open "http://#{app}.pagodabox.com"
+    end
+
+    def rename
+      # will be implemented once we have it implemented in the pagoda kernel
+
+      display "not yet implemented"
+    end
 
     def create
       if app_name = app(true)

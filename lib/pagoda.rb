@@ -5,10 +5,12 @@ require 'pagoda/helpers'
 require 'pagoda/auth'
 require 'pagoda/runner'
 require 'pagoda/commands/base'
+require 'pagoda/commands/help'
 require 'pagoda/commands/app'
 require 'pagoda/commands/mysql'
 require 'pagoda/commands/tunnel'
-require 'pagoda/commands/credentials'
+require 'pagoda/commands/auth'
+require 'pagoda/commands/config'
 
 module Pagoda
 

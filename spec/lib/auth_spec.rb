@@ -43,7 +43,7 @@ describe Pagoda::Auth do
 
   it "should error out if credetials are not valid" do
     c = Pagoda::Client.new(nil,nil)
-    c.stub(:app_list).and_raise("AUTHINGACTION FALIED YOU NUB")
+    c.stub!(:valid_credentials?).and_return(false)
     Pagoda::Client.stub(:new).and_return(c)
     Pagoda::Auth.should_receive(:error).with(["Authentication failed"])
     Pagoda::Auth.save_credentials(["baduser","password"])
@@ -51,7 +51,7 @@ describe Pagoda::Auth do
 
   it "should write credentials if they are valid" do
     c = Pagoda::Client.new(nil,nil)
-    c.stub(:app_list).and_return({:appnamesmeothing => "somethingelse"})
+    c.stub(:valid_credentials?).and_return(true)
     Pagoda::Client.stub(:new).and_return(c)
     Pagoda::Auth.should_receive(:write_credentials).with(["baduser","password"])
     Pagoda::Auth.save_credentials(["baduser","password"])
