@@ -12,6 +12,7 @@ require 'pagoda/commands/tunnel'
 require 'pagoda/commands/auth'
 require 'pagoda/commands/config'
 require 'pagoda/commands/logs'
+require 'pagoda/commands/keys'
 
 module Pagoda
 
