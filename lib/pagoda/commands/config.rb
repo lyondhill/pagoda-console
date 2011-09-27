@@ -2,11 +2,11 @@ module Pagoda::Command
   class Config < Base
 
     def add
-      puts args
+      display "not yet implemented"
     end
 
     def remove
-      puts args
+      display "not yet implemented"
     end
 
   end

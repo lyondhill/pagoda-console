@@ -4,9 +4,10 @@ module Pagoda
   class Runner
 
 # DO NOT PUT A LOOP IN THE ARRAY ie ( apps => app, app => apps) <= will break for sure
-    VINTAGE = {
+    ALIAS = {
                 "apps" => "app",
-                'db' => "mysql"
+                'db' => "mysql",
+                "sharing" => "collaborator"
               }
 
     class InvalidCommand < RuntimeError; end
@@ -55,7 +56,7 @@ module Pagoda
             begin
               return eval("Pagoda::Command::#{command.capitalize}"), :index
             rescue NameError, NoMethodError
-              if vintage_command = VINTAGE[command]
+              if vintage_command = ALIAS[command]
                 return parse(vintage_command)
               end
               return Pagoda::Command::App, command.to_sym
@@ -67,7 +68,7 @@ module Pagoda
               parts.each { |part| const = const.const_get(part.capitalize) }
               return const, command.to_sym
             rescue NameError
-              if parts[0] = VINTAGE[parts[0]]  # ADD VINTAGE STUFF
+              if parts[0] = ALIAS[parts[0]]  # ADD VINTAGE STUFF
                 return parse(parts.join(":") << ":" << command)
               end
               raise InvalidCommand

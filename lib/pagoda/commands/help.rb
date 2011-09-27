@@ -1,6 +1,8 @@
 module Pagoda::Command
   class Help < Base
     def index
+      puts args
+
       display %{
 Pagoda
 
