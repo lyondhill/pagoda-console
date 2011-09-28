@@ -104,7 +104,29 @@ module Pagoda
     #     end
     #   end
     # end
-    
+
+    private
+
+    def has_git?
+      %x{ git --version }
+      $?.success?
+    end
+
+    def git(args)
+      return "" unless has_git?
+      flattened_args = [args].flatten.compact.join(" ")
+      %x{ git #{flattened_args} 2>&1 }.strip
+    end
+
+
+    def create_git_remote(id, remote)
+      error "you do not have git installed on your computer" unless has_git?
+      error "this remote is already in use on this repo" if git('remote').split("\n").include?(remote)
+      error(["repo has not been initialized." , "try 'git init'"]) unless File.exists?(".git")
+      git "remote add #{remote} git@#{heroku.host}:#{id}.git"
+      display "Git remote #{remote} added"
+    end
+
     def build_indent(level=1)
       indent = ""
       level.times do

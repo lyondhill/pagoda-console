@@ -4,7 +4,6 @@ module Pagoda::Command
 
   class App < Base
     
-
     def list
       apps = client.app_list
       unless apps.empty?
@@ -53,55 +52,67 @@ module Pagoda::Command
 
     def rename
       # will be implemented once we have it implemented in the pagoda kernel
-
       display "not yet implemented"
     end
 
+    # def create
+    #   if app_name = app(true)
+    #     error ["This project is already launched and paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
+    #   end
+      
+    #   unless locate_app_root
+    #     error ["Unable to find git config in this directory or in any parent directory"]
+    #   end
+      
+    #   unless clone_url = extract_git_clone_url
+    #     errors = []
+    #     errors << "It appears you are using git (fantastic)."
+    #     errors << "However we only support git repos hosted with github."
+    #     errors << "Please ensure your repo is hosted with github."
+    #     error errors
+    #   end
+      
+    #   unless name = args.dup.shift
+    #     error "Please Specify an app name ie. 'pagoda launch awesomeapp'"
+    #   end
+      
+    #   display
+    #   display "+> Registering #{name}"
+    #   client.app_create(name, clone_url)
+    #   display "+> Launching...", false
+    #   loop_transaction(name)
+    #   write_app(name, clone_url)
+    #   display "+> #{name} launched"
+      
+    #   unless option_value(nil, "--latest")
+    #     Pagoda::Runner.run_internal("app:deploy", args)
+    #   end
+      
+    #   if option_value(nil, "--with-mysql")
+    #     Pagoda::Runner.run_internal("db:create", args)
+    #   end
+      
+    #   display "-----------------------------------------------"
+    #   display
+    #   display "LIVE URL    : http://#{name}.pagodabox.com"
+    #   display "ADMIN PANEL : http://dashboard.pagodabox.com"
+    #   display
+    #   display "-----------------------------------------------"
+    #   display
+      
+    # end
+
     def create
-      if app_name = app(true)
-        error ["This project is already launched and paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
+      name = args.shift.downcase.strip rescue nil
+      remote = option_value("-r", "--remote") || "pagoda"
+      if client.app_available?(name)
+        id = client.app_create(name)
+        display("Creating #{name}...", false)
+        loop_transaction
+        create_git_remote(id, remote || "pagoda")
+      else
+        error "App name is already taken"
       end
-      
-      unless locate_app_root
-        error ["Unable to find git config in this directory or in any parent directory"]
-      end
-      
-      unless clone_url = extract_git_clone_url
-        errors = []
-        errors << "It appears you are using git (fantastic)."
-        errors << "However we only support git repos hosted with github."
-        errors << "Please ensure your repo is hosted with github."
-        error errors
-      end
-      
-      unless name = args.dup.shift
-        error "Please Specify an app name ie. 'pagoda launch awesomeapp'"
-      end
-      
-      display
-      display "+> Registering #{name}"
-      client.app_create(name, clone_url)
-      display "+> Launching...", false
-      loop_transaction(name)
-      write_app(name, clone_url)
-      display "+> #{name} launched"
-      
-      unless option_value(nil, "--latest")
-        Pagoda::Runner.run_internal("app:deploy", args)
-      end
-      
-      if option_value(nil, "--with-mysql")
-        Pagoda::Runner.run_internal("db:create", args)
-      end
-      
-      display "-----------------------------------------------"
-      display
-      display "LIVE URL    : http://#{name}.pagodabox.com"
-      display "ADMIN PANEL : http://dashboard.pagodabox.com"
-      display
-      display "-----------------------------------------------"
-      display
-      
     end
     alias :launch :create
     alias :register :create

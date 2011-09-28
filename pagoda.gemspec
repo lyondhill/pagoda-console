@@ -25,11 +25,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webmock"
   s.add_development_dependency "fakefs"
   
-  s.add_dependency "rest-client"
+  # s.add_dependency "rest-client"
   s.add_dependency "pagoda-client"
   s.add_dependency "pagoda-tunnel"
-  s.add_dependency "json_pure"
+  # s.add_dependency "json_pure"
   s.add_dependency "iniparse"
-  s.add_dependency "launchy"
+  # s.add_dependency "launchy"
   
 end
