@@ -5,7 +5,7 @@ require "pagoda/version"
 Gem::Specification.new do |s|
   s.name        = "pagoda"
   s.version     = Pagoda::VERSION
-  s.authors     = ["Lyon"]
+  s.authors     = ["Lyon", "Andrew"]
   s.email       = ["lyon@delorum.com"]
   s.homepage    = ""
   s.summary     = %q{getoutahere}

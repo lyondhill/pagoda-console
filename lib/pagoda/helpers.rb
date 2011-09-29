@@ -105,8 +105,6 @@ module Pagoda
     #   end
     # end
 
-    private
-
     def has_git?
       %x{ git --version }
       $?.success?
@@ -122,8 +120,9 @@ module Pagoda
     def create_git_remote(id, remote)
       error "you do not have git installed on your computer" unless has_git?
       error "this remote is already in use on this repo" if git('remote').split("\n").include?(remote)
-      error(["repo has not been initialized." , "try 'git init'"]) unless File.exists?(".git")
-      git "remote add #{remote} git@#{heroku.host}:#{id}.git"
+      error(["repo has not been initialized." , "try 'git init'"]) unless File.directory?(".git")
+      git "remote add #{remote} git@pagodabox.com:#{id}.git"
+      git "config --add pagoda.id #{id}"
       display "Git remote #{remote} added"
     end
 

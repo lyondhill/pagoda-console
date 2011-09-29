@@ -1,5 +1,3 @@
-require 'launchy'
-
 module Pagoda::Command
 
   class App < Base
@@ -45,14 +43,28 @@ module Pagoda::Command
       display
     end
 
-    def open
-      display "Opening #{app}"
-      Launchy.open "http://#{app}.pagodabox.com"
-    end
-
     def rename
       # will be implemented once we have it implemented in the pagoda kernel
-      display "not yet implemented"
+      new_name = option_value("-n", "--name") || args.first
+      error "I need the new name" unless new_name
+      client.app_rename(app, new_name)
+      display "Successfully changed name to #{new_name}"
+    end
+
+    def init
+      id = client.app_info(app)[:id]
+      create_git_remote(id, remote)
+    end
+
+    def clone
+      app_name = option_value("-a","--app") || args.first
+      error "I need the app you would like to clone" unless app_name
+      id = client.app_info(app)[:id]
+      git "clone git@pagodabox.com:#{id}.git #{app}"
+      Dir.chdir(app)
+      git "config --add pagoda.id #{id}"
+      Dir.chdir("..")
+      display "repo has been added"
     end
 
     # def create
@@ -104,12 +116,11 @@ module Pagoda::Command
 
     def create
       name = args.shift.downcase.strip rescue nil
-      remote = option_value("-r", "--remote") || "pagoda"
       if client.app_available?(name)
         id = client.app_create(name)
         display("Creating #{name}...", false)
         loop_transaction
-        create_git_remote(id, remote || "pagoda")
+        create_git_remote(id, remote)
       else
         error "App name is already taken"
       end
@@ -128,7 +139,7 @@ module Pagoda::Command
         display "+> deployed"
         display
       else
-        client.app_deploy(app, parse_branch, parse_commit)
+        client.app_deploy(app, branch, commit)
         display "+> deploying current branch and commit...", false
         loop_transaction
         display "+> deployed"
@@ -148,18 +159,18 @@ module Pagoda::Command
     alias :rollback :rewind
     alias :undo :rewind
     
-    def fast_forward
-      app
-      display
-      transaction = client.app_fast_forward(app)
-      display "+> redo...", false
-      loop_transaction
-      display "+> done"
-      display
-    end
-    alias :fastforward :fast_forward
-    alias :forward :fast_forward
-    alias :redo :fast_forward
+    # def fast_forward
+    #   app
+    #   display
+    #   transaction = client.app_fast_forward(app)
+    #   display "+> redo...", false
+    #   loop_transaction
+    #   display "+> done"
+    #   display
+    # end
+    # alias :fastforward :fast_forward
+    # alias :forward :fast_forward
+    # alias :redo :fast_forward
 
     def destroy
       display
@@ -173,97 +184,97 @@ module Pagoda::Command
     end
     alias :delete :destroy
 
-    def pair
-      if app_name = app(true)
-        error ["This project is paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
-      end
-      unless locate_app_root
-        error ["Unable to find git config in this directory or in any parent directory"]
-      end
-      unless my_repo = extract_git_clone_url
-        errors = []
-        errors << "It appears you are using git (fantastic)."
-        errors << "However we only support git repos hosted with github."
-        errors << "Please ensure your repo is hosted with github."
-        error errors
-      end
+    # def pair
+    #   if app_name = app(true)
+    #     error ["This project is paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
+    #   end
+    #   unless locate_app_root
+    #     error ["Unable to find git config in this directory or in any parent directory"]
+    #   end
+    #   unless my_repo = extract_git_clone_url
+    #     errors = []
+    #     errors << "It appears you are using git (fantastic)."
+    #     errors << "However we only support git repos hosted with github."
+    #     errors << "Please ensure your repo is hosted with github."
+    #     error errors
+    #   end
       
-      display
-      display "+> Locating deployed app with matching git repo"
+    #   display
+    #   display "+> Locating deployed app with matching git repo"
       
-      apps = client.app_list
+    #   apps = client.app_list
       
-      matching_apps = []
-      apps.each do |a|
-        if a[:git_url] == my_repo
-          matching_apps.push a
-        end
-      end
+    #   matching_apps = []
+    #   apps.each do |a|
+    #     if a[:git_url] == my_repo
+    #       matching_apps.push a
+    #     end
+    #   end
       
-      if matching_apps.count > 1
-        if name = app(true) || ARGV.first
-          assign_app = nil
-          matching_apps.each do |a|
-            assign_app = a if a[:name] == name
-          end
-          if assign_app
-            display "+> Pairing this repo to deployed app - #{assign_app[:name]}"
-            pair_with_remote(assign_app)
-            display "+> Repo is now paired to '#{assign_app[:name]}'"
-            display
-          else
-            error "#{name} is not found among your launched app list"
-          end
-        else
-          errors = []
-          errors << "Multiple matches found"
-          errors << ""
-          matching_apps.each do |match|
-            errors << "-> #{match[:name]}"
-          end
-          errors << ""
-          errors << "You have more then one app that uses this repo."
-          errors << "Please specify which app you would like to pair to."
-          errors << ""
-          errors << "ex: pagoda pair #{matching_apps[0][:name]}"
-          error errors
-        end
-      elsif matching_apps.count == 1
-        match = matching_apps.first
-        display "+> Pairing this repo to deployed app - #{match[:name]}"
-        pair_with_remote match
-        display "+> Repo is now paired to '#{match[:name]}'"
-        display
-      else
-        error "Current git repo doesn't match any launched app repos"
-      end
-    end
+    #   if matching_apps.count > 1
+    #     if name = app(true) || ARGV.first
+    #       assign_app = nil
+    #       matching_apps.each do |a|
+    #         assign_app = a if a[:name] == name
+    #       end
+    #       if assign_app
+    #         display "+> Pairing this repo to deployed app - #{assign_app[:name]}"
+    #         pair_with_remote(assign_app)
+    #         display "+> Repo is now paired to '#{assign_app[:name]}'"
+    #         display
+    #       else
+    #         error "#{name} is not found among your launched app list"
+    #       end
+    #     else
+    #       errors = []
+    #       errors << "Multiple matches found"
+    #       errors << ""
+    #       matching_apps.each do |match|
+    #         errors << "-> #{match[:name]}"
+    #       end
+    #       errors << ""
+    #       errors << "You have more then one app that uses this repo."
+    #       errors << "Please specify which app you would like to pair to."
+    #       errors << ""
+    #       errors << "ex: pagoda pair #{matching_apps[0][:name]}"
+    #       error errors
+    #     end
+    #   elsif matching_apps.count == 1
+    #     match = matching_apps.first
+    #     display "+> Pairing this repo to deployed app - #{match[:name]}"
+    #     pair_with_remote match
+    #     display "+> Repo is now paired to '#{match[:name]}'"
+    #     display
+    #   else
+    #     error "Current git repo doesn't match any launched app repos"
+    #   end
+    # end
     
-    def unpair
-      app
-      display
-      display "+> Unpairing this repo"
-      remove_app(app)
-      display "+> Free at last!"
-      display
-    end
+    # def unpair
+    #   app
+    #   display
+    #   display "+> Unpairing this repo"
+    #   remove_app(app)
+    #   display "+> Free at last!"
+    #   display
+    # end
   
-  protected
+  # protected
     
-    def pair_with_remote(app)
-      my_app_list = read_apps
-      current_root = locate_app_root
-      in_list = false
-      my_app_list.each do |app_str|
-        app_arr = app_str.split(" ")
-        if app[:git_url] == app_arr[1] && app[:name] == app_arr[0] || app_arr[2] == current_root
-          in_list = true
-        end
-      end
-      unless in_list
-        add_app app[:name]
-      end
-    end
+  #   def pair_with_remote(app)
+  #     my_app_list = read_apps
+  #     current_root = locate_app_root
+  #     in_list = false
+  #     my_app_list.each do |app_str|
+  #       app_arr = app_str.split(" ")
+  #       if app[:git_url] == app_arr[1] && app[:name] == app_arr[0] || app_arr[2] == current_root
+  #         in_list = true
+  #       end
+  #     end
+  #     unless in_list
+  #       add_app app[:name]
+  #     end
+  #   end
 
 
   end

@@ -3,7 +3,7 @@ require 'rest-client'
 module Pagoda
   class Runner
 
-# DO NOT PUT A LOOP IN THE ARRAY ie ( apps => app, app => apps) <= will break for sure
+# DO NOT PUT A LOOP IN THE ARRAY ie ( cows => horse, horse => cows) <= will break for sure
     ALIAS = {
                 "apps" => "app",
                 'db' => "mysql",
@@ -34,7 +34,7 @@ module Pagoda
         rescue RestClient::RequestFailed => e
           error extract_error(e.http_body) unless e.http_code == 402 || e.http_code == 102
         rescue RestClient::RequestTimeout
-          error "API request timed out. Please try again, or contact support@pagodagrid.com if this issue persists."
+          error "API request timed out. Please try again, or contact support@pagodabox.com if this issue persists."
         # rescue CommandFailed => e
           # error e.message
         rescue Interrupt => e
