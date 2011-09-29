@@ -53,6 +53,12 @@ pre do |global,command,options,args|
   # chosen command
   # Use skips_pre before a command to skip this block
   # on that command only
+  unless global[:username] && global[:password]
+    puts "it appears this is the first time you have used our client"
+    user, password = Pagoda::Command::Base.ask_for_credentials
+    GLI.run(["--username=#{user}","--password=#{password}","initconfig"])
+  end
+
   if global[:help] or options[:help]
     GLI.commands[:help].execute(global, {}, [ command.name ])
     false
