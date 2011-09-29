@@ -1,5 +1,3 @@
-require 'pagoda/helpers'
-
 module Pagoda
   class Auth
     extend Pagoda::Helpers

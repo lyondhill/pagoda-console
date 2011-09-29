@@ -136,3 +136,9 @@ module Pagoda
     
   end
 end
+
+require 'pagoda/cli/helpers/base'
+require 'pagoda/cli/helpers/app'
+require 'pagoda/cli/helpers/auth'
+require 'pagoda/cli/helpers/help'
+require 'pagoda/cli/helpers/tunnel'

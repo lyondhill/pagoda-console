@@ -11,37 +11,63 @@ Describe your application here
 == Global Options
 These options are available for any command and are specified before the name of the command
 
-[<tt>-f, --flagname=The name of the argument</tt>] Describe some flag here <i>( default: <tt>the default</tt>)</i>
-[<tt>-s, --switch</tt>] Describe some switch here
+[<tt>-a, --app=APP_NAME</tt>] The app name for Pagoda Box <i>( default: <tt>pagodabox-test</tt>)</i>
+[<tt>-h, --help</tt>] Help
 == Commands
-[<tt>clone</tt>] Describe clone here
+[<tt>clone</tt>] You must specify an app name to clone.
+[<tt>config</tt>] You must specify an app name to clone.
 [<tt>create</tt>] Describe create here
 [<tt>deploy</tt>] Describe deploy here
 [<tt>destroy</tt>] Describe destroy here
 [<tt>help</tt>] Shows list of commands or help for one command
 [<tt>info</tt>] Describe info here
 [<tt>init</tt>] Describe init here
+[<tt>initconfig</tt>] Initialize the config file using current global options
 [<tt>list</tt>] Describe list here
-[<tt>rename</tt>] Describe rename here
+[<tt>rename</tt>] Describe rename here, Haha
 [<tt>rollback</tt>] Describe rollback here
 [<tt>tunnel</tt>] Describe tunnel here
 
 === <tt>clone Describe arguments to clone here</tt>
 
-Describe clone here
+You must specify an app name to clone.
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
+=== <tt>config Describe arguments to clone here</tt>
+
+You must specify an app name to clone.
+
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>create Describe arguments to create here</tt>
 
 Describe create here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>deploy Describe arguments to deploy here</tt>
 
 Describe deploy here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>destroy Describe arguments to destroy here</tt>
 
 Describe destroy here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>help [command]</tt>
 
 Shows list of commands or help for one command
@@ -56,10 +82,28 @@ These options are specified *after* the command.
 
 Describe info here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>init Describe arguments to init here</tt>
 
 Describe init here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
+=== <tt>initconfig </tt>
+
+Initialize the config file using current global options
+
+Initializes a configuration file where you can set default options for command line flags, both globally and on a per-command basis.  These defaults override the built-in defaults and allow you to omit commonly-used command line flags when invoking this program
+
+==== Options
+These options are specified *after* the command.
+
+[<tt>--force</tt>] force overwrite of existing config file
 === <tt>list Describe arguments to list here</tt>
 
 Describe list here
@@ -67,17 +111,29 @@ Describe list here
 ==== Options
 These options are specified *after* the command.
 
-[<tt>-f arg</tt>] Describe a flag to list <i>( default: <tt>default</tt>)</i>
-[<tt>-s</tt>] Describe a switch to list
+[<tt>-h, --help</tt>] Help
+[<tt>-w, --web</tt>] Web Components
 === <tt>rename Describe arguments to rename here</tt>
 
-Describe rename here
+Describe rename here, Haha
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>rollback Describe arguments to rollback here</tt>
 
 Describe rollback here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help
 === <tt>tunnel Describe arguments to tunnel here</tt>
 
 Describe tunnel here
 
+==== Options
+These options are specified *after* the command.
+
+[<tt>-h, --help</tt>] Help

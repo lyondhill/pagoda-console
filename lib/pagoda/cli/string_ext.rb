@@ -6,7 +6,6 @@ unless String.method_defined?(:shellescape)
   end
 end
 
-
 class String
 
   #
