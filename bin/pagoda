@@ -46,6 +46,7 @@ pre do |global,command,options,args|
   unless global[:username] && global[:password]
     puts "it appears this is the first time you have used our client"
     user, password = Pagoda::Command::Base.ask_for_credentials
+    global.merge!({:username => user, :password => password})
     GLI.run(["--username=#{user}","--password=#{password}","initconfig"])
   end
 
