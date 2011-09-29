@@ -37,23 +37,27 @@ switch [:h, :help]
 require 'pagoda/cli/commands'
 require 'pagoda/cli'
 
+GLI::DefaultHelpCommand.skips_pre = true
+
 pre do |global,command,options,args|
   # Pre logic here
   # Return true to proceed; false to abourt and not call the
   # chosen command
   # Use skips_pre before a command to skip this block
   # on that command only
-  unless global[:username] && global[:password]
-    puts "it appears this is the first time you have used our client"
-    user, password = Pagoda::Command::Base.ask_for_credentials
-    global.merge!({:username => user, :password => password})
-    GLI.run(["--username=#{user}","--password=#{password}","initconfig"])
-  end
 
   if global[:help] or options[:help]
     GLI.commands[:help].execute(global, {}, [ command.name ])
     false
   else
+    if command and not global[:username] and not global[:password]
+      puts "it appears this is the first time you have used our client"
+      user, password = Pagoda::Command::Base.ask_for_credentials
+      GLI.commands[:config].execute({}, {}, [ 'username', user     ])
+      GLI.commands[:config].execute({}, {}, [ 'password', password ])
+      global.merge!(username: user, password: password)
+    end
+
     true
   end
 end

@@ -50,6 +50,7 @@ module Pagoda
         def echo_on
           silently(system "stty echo")
         rescue
+        end
           
       end
 
