@@ -14,11 +14,12 @@ $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
 require 'rubygems'
 require 'gli'
 require 'pagoda/cli/version'
+require 'pagoda/cli/common'
 
 # command = ARGV.shift.strip rescue 'help'
 # Pagoda::Runner.go(command, ARGV.dup)
 
-include GLI
+include Pagoda::CLI::Common
 
 program_desc 'Describe your application here'
 
@@ -32,17 +33,6 @@ flag [:a, :app]
 
 desc "Help"
 switch [:h, :help]
-
-def command(*names)
-  command = Command.new([names].flatten,@@next_desc,@@next_arg_name,@@next_long_desc,@@skips_pre,@@skips_post)
-  commands[command.name] = command
-  yield command
-  command.tap do |c|
-    c.desc "Help"
-    c.switch [:h, :help]
-  end
-  clear_nexts
-end
 
 require 'pagoda/cli/commands'
 require 'pagoda/cli'
