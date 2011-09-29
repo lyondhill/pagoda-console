@@ -1,6 +1,137 @@
 #!/usr/bin/env ruby
+# 1.9 adds realpath to resolve symlinks; 1.8 doesn't
+# have this method, so we add it so we get resolved symlinks
+# and compatibility
+unless File.respond_to? :realpath
+  class File #:nodoc:
+    def self.realpath path
+      return realpath(File.readlink(path)) if symlink?(path)
+      path
+    end
+  end
+end
+$: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+require 'rubygems'
+require 'gli'
+require 'pagoda/cli/version'
 
-require 'pagoda'
+# command = ARGV.shift.strip rescue 'help'
+# Pagoda::Runner.go(command, ARGV.dup)
 
-command = ARGV.shift.strip rescue 'help'
-Pagoda::Runner.go(command, ARGV.dup)
+include GLI
+
+program_desc 'Describe your application here'
+
+version Pagoda::CLI::VERSION
+
+desc 'Describe some switch here'
+switch [:s,:switch]
+
+desc 'Describe some flag here'
+default_value 'the default'
+arg_name 'The name of the argument'
+flag [:f,:flagname]
+
+desc 'Describe list here'
+arg_name 'Describe arguments to list here'
+command :list do |c|
+  c.desc 'Describe a switch to list'
+  c.switch :s
+
+  c.desc 'Describe a flag to list'
+  c.default_value 'default'
+  c.flag :f
+  c.action do |global_options,options,args|
+
+    # Your command logic here
+     
+    # If you have any errors, just raise them
+    # raise "that command made no sense"
+  end
+end
+
+desc 'Describe create here'
+arg_name 'Describe arguments to create here'
+command :create do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe clone here'
+arg_name 'Describe arguments to clone here'
+command :clone do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe init here'
+arg_name 'Describe arguments to init here'
+command :init do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe rename here'
+arg_name 'Describe arguments to rename here'
+command :rename do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe destroy here'
+arg_name 'Describe arguments to destroy here'
+command :destroy do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe deploy here'
+arg_name 'Describe arguments to deploy here'
+command :deploy do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe rollback here'
+arg_name 'Describe arguments to rollback here'
+command :rollback do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe info here'
+arg_name 'Describe arguments to info here'
+command :info do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+desc 'Describe tunnel here'
+arg_name 'Describe arguments to tunnel here'
+command :tunnel do |c|
+  c.action do |global_options,options,args|
+  end
+end
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abourt and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit GLI.run(ARGV)
