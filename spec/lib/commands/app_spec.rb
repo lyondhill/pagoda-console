@@ -78,19 +78,5 @@ describe Pagoda::Command::App do
     @app.deploy
   end
 
-  it "errors all over when failing to pair with an app" do
-    @app.stub(:app).and_return('name')
-    @app.stub(:locate_app_root).and_return(false)
-    @app.stub(:extract_git_clone_url).and_return(false)
-    @app.stub(:display)
-    @app.client.stub(:app_list).and_return([])
-    @app.should_receive(:error).with(["This project is paired to name.", "To unpair run 'pagoda unpair'"])
-    @app.should_receive(:error).with(["Unable to find git config in this directory or in any parent directory"])
-    @app.should_receive(:error).with(["It appears you are using git (fantastic).", "However we only support git repos hosted with github.", "Please ensure your repo is hosted with github."])
-    @app.should_receive(:error).with("Current git repo doesn't match any launched app repos")
-    @app.pair
-
-  end
-
 
 end
