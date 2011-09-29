@@ -53,7 +53,6 @@ module Pagoda
         end
           
       end
-
       
       attr_reader :client
       attr_reader :globals
