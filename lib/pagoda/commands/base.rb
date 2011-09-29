@@ -5,18 +5,81 @@ module Pagoda
   module Command
 
     class Base
-      GIT_REGEX = /^((git@github.com:)|(.*:)|((http|https):\/\/.*github.com\/)|(git:\/\/github.com\/))(.*)\/(.*).git$/i
+
       include Pagoda::Helpers
+
+      # all the necessary stuff from auth
+      class << self
+
+        include Pagoda::Helpers
+        def ask_for_credentials
+          username = ask "Username: "
+          display "Password: ", false
+          password = running_on_windows? ? ask_for_password_on_windows : ask_for_password
+          [username, password] # return
+        end
+
+        def ask_for_password
+          echo_off
+          password = ask
+          puts
+          echo_on
+          return password
+        end
+
+        def ask_for_password_on_windows
+          require "Win32API"
+          char = nil
+          password = ''
+          
+          while char = Win32API.new("crtdll", "_getch", [ ], "L").Call do
+            break if char == 10 || char == 13 # received carriage return or newline
+            if char == 127 || char == 8 # backspace and delete
+              password.slice!(-1, 1)
+            else
+              # windows might throw a -1 at us so make sure to handle RangeError
+              (password << char.chr) rescue RangeError
+            end
+          end
+          return password
+        end
+
+        def echo_off
+          silently(system "stty -echo")
+        rescue
+        end
+
+        def echo_on
+          silently(system "stty echo")
+        rescue
+      end
+
+
+      end
+
+      GIT_REGEX = /^((git@github.com:)|(.*:)|((http|https):\/\/.*github.com\/)|(git:\/\/github.com\/))(.*)\/(.*).git$/i
       
       attr_reader :client
+      attr_reader :global
+      attr_reader :options
       attr_accessor :args
 
-      def initialize(args)
+      def initialize(globals, options, args)
+        @global = globals
+        @options = options
         @args = args
       end
 
+      def user
+        global[:username] rescue nil
+      end
+
+      def password
+        global[:password] rescue nil
+      end
+
       def client
-        @client ||= Pagoda::Client.new(Pagoda::Auth.user, Pagoda::Auth.password)
+        @client ||= Pagoda::Client.new(user, password)
       end
       
       def shell(cmd)
@@ -24,7 +87,7 @@ module Pagoda
       end
       
       def remote
-        option_value("-r", "--remote") || "pagoda"
+        options[:remote]
       end
 
       def app(soft_fail=false)

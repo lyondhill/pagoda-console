@@ -22,7 +22,6 @@ describe Pagoda::Command::App do
     @app.list
   end
 
-
   it "displays the app info" do
     response = {
       :name => "Appname",
@@ -77,6 +76,5 @@ describe Pagoda::Command::App do
     @app.client.should_receive(:app_deploy).once
     @app.deploy
   end
-
 
 end
