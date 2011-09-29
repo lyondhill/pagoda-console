@@ -27,6 +27,14 @@ version Pagoda::CLI::VERSION
 
 config_file '.pagodarc'
 
+desc "Username created on pagodabox"
+arg_name "Username"
+flag [:u, :username]
+
+desc "Password to connect to pagodabox"
+arg_name "Password"
+flag [:p, :password]
+
 desc 'The app name for Pagoda Box'
 arg_name 'APP_NAME'
 flag [:a, :app]
@@ -50,7 +58,7 @@ pre do |global,command,options,args|
     GLI.run(["--username=#{user}","--password=#{password}","initconfig"])
   end
 
-  if global[:help] or options[:help]
+  if ARGV.join("") =~ /(help|-h|--help)/
     GLI.commands[:help].execute(global, {}, [ command.name ])
     false
   else

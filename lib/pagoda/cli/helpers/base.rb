@@ -50,9 +50,9 @@ module Pagoda
         def echo_on
           silently(system "stty echo")
         rescue
-          
-      end
 
+        end
+      end
       
       attr_reader :client
       attr_reader :globals
