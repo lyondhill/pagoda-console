@@ -1,14 +1,14 @@
 desc 'Describe list here'
 arg_name 'Describe arguments to list here'
-command :list do |c|
+command :list do
 
-  c.desc "Web Components"
-  c.switch [:w, :web]
+  desc "Web Components"
+  switch [:w, :web]
 
-  c.action do |global_options,options,args|
+  action do |global_options,options,args|
 
-    app = ::Pagoda::Command::App.new(args)
-    app.list
+    # app = ::Pagoda::Command::App.new(args)
+    # app.list
 
   end
 end
