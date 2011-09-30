@@ -4,7 +4,7 @@ require 'fakefs'
 describe Pagoda::Command::Base do
 
   before :all do
-    @base = Pagoda::Command::Base.new(nil)
+    @base = Pagoda::Command::Base.new({},{},[])
   end
   
   it "can find my current branch" do

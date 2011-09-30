@@ -24,29 +24,6 @@ module Pagoda
       end
     end
     
-    # def option_value(short_hand = nil, long_hand = nil)
-    #   match = false
-    #   value = nil
-      
-    #   if short_hand
-    #     if ARGV.include?(short_hand)
-    #       value = ARGV[ARGV.index(short_hand) + 1]
-    #       match = true
-    #     end
-    #   end
-    #   if long_hand && !match
-    #     if match = ARGV.grep(/#{long_hand}.*/).first
-    #       if match.include? "="
-    #         value = match.split("=").last
-    #       else
-    #         value = true
-    #       end
-    #     end
-    #   end
-      
-    #   value
-    # end
-
     def format_date(date)
       date = Time.parse(date) if date.is_a?(String)
       date.strftime("%Y-%m-%d %H:%M %Z")

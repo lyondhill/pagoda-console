@@ -1,9 +1,10 @@
 require 'spec_helper'
+require 'pagoda/cli/helpers'
 
 describe Pagoda::Command::App do
   
   before :all do
-    @app = Pagoda::Command::App.new(['name'])
+    @app = Pagoda::Command::App.new({},{},['name'])
   end
 
   it "Should error if no apps are found" do

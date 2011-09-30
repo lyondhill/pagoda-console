@@ -1,6 +1,6 @@
 require 'bundler/setup'
 # require 'fakefs'
-require 'pagoda'
+require 'pagoda/cli/helpers'
 
 def silently(&block)
   warn_level = $VERBOSE

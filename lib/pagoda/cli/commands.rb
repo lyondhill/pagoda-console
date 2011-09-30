@@ -1,5 +1,4 @@
 require 'pagoda/cli/commands/clone'
-# require 'pagoda/cli/commands/config'
 require 'pagoda/cli/commands/create'
 require 'pagoda/cli/commands/deploy'
 require 'pagoda/cli/commands/destroy'

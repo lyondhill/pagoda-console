@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Pagoda::Command::Tunnel do
   
   before :all do
-    @tunnel = Pagoda::Command::Tunnel.new(['-a','app'])
+    @tunnel = Pagoda::Command::Tunnel.new({},{},['-a','app'])
   end
 
   it "should be able to create a database for the app" do

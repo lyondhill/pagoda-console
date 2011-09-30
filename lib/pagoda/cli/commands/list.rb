@@ -5,10 +5,18 @@ command :list do
   desc "Web Components"
   switch [:w, :web]
 
+  desc "Database Components"
+  switch [:d, :database]
+
+  desc "Cache Components"
+  switch [:c, :cache]
+
+  desc "Worker Components"
+  switch [:r, :worker]
+
   action do |global_options,options,args|
 
-    app = ::Pagoda::Command::App.new(global_options,options,args)
-    app.list
+    ::Pagoda::Command::App.new(global_options,options,args).list
 
   end
 end

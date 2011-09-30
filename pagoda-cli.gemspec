@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "pagoda-client"
   gem.add_dependency "pagoda-tunnel"
   gem.add_dependency "iniparse"
+  gem.add_dependency "gli"
 end
