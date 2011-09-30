@@ -20,14 +20,10 @@ module Pagoda
       end
 
       def parse_config # :nodoc:
-        puts "PARSE CONFIG"
         return nil if @@config_file.nil?
-        puts "CINFIG FILE NOT NIL"
         require 'yaml'
         if File.exist?(@@config_file)
-          puts "CONFIG FILE EXISTS"
-          yaml = File.open(@@config_file) { |file| YAML::load(file) }
-          puts yaml
+          File.open(@@config_file) { |file| YAML::load(file) }
         else
           {}
         end
