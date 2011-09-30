@@ -1,12 +1,12 @@
 desc 'Clone an application from pagodabox'
 arg_name 'Application Name'
-command :clone do
+command :clone do |c|
 
-  desc 'Your application name on pagodabox'
-  arg_name 'APP_NAME'
-  flag [:a, :app]
+  c.desc 'Your application name on pagodabox'
+  c.arg_name 'APP_NAME'
+  c.flag [:a, :app]
 
-  action do |global_options,options,args|
+  c.action do |global_options,options,args|
     Pagoda::Command::App.new(global_options,options,args).clone
   end
 end

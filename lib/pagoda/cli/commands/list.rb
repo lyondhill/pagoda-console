@@ -1,19 +1,19 @@
 desc 'List information on pagodabox'
-command :list do
+command :list do |c|
 
-  desc "Web Components"
-  switch [:w, :web]
+  c.desc "Web Components"
+  c.switch [:w, :web]
 
-  desc "Database Components"
-  switch [:d, :database]
+  c.desc "Database Components"
+  c.switch [:d, :database]
 
-  desc "Cache Components"
-  switch [:c, :cache]
+  c.desc "Cache Components"
+  c.switch [:c, :cache]
 
-  desc "Worker Components"
-  switch [:r, :worker]
+  c.desc "Worker Components"
+  c.switch [:r, :worker]
 
-  action do |global_options,options,args|
+  c.action do |global_options,options,args|
 
     ::Pagoda::Command::App.new(global_options,options,args).list
 

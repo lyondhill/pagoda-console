@@ -1,12 +1,12 @@
 desc 'Create a new application on pagodabox'
 arg_name 'New application name'
-command :create do
+command :create do |c|
 
-  desc 'New app name'
-  arg_name 'APP_NAME'
-  flag [:a, :app]
+  c.desc 'New app name'
+  c.arg_name 'APP_NAME'
+  c.flag [:a, :app]
 
-  action do |global_options,options,args|
+  c.action do |global_options,options,args|
     Pagoda::Command::App.new(global_options,options,args).create
   end
 end

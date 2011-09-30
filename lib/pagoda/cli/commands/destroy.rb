@@ -1,15 +1,15 @@
 desc 'Destroy your application'
 arg_name 'Describe arguments to destroy here'
-command :destroy do
+command :destroy do |c|
 
-  desc "Force without confirmation"
-  switch [:f, :force]
+  c.desc "Force without confirmation"
+  c.switch [:f, :force]
 
-  desc 'New app name'
-  arg_name 'APP_NAME'
-  flag [:a, :app]
+  c.desc 'New app name'
+  c.arg_name 'APP_NAME'
+  c.flag [:a, :app]
 
-  action do |global_options,options,args|
+  c.action do |global_options,options,args|
     Pagoda::Command::App.new(global_options,options,args).destroy
   end
 end

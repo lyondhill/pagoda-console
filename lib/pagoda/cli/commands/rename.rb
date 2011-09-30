@@ -1,17 +1,17 @@
 desc 'Rename your application'
 arg_name 'Application name'
-command :rename do
+command :rename do |c|
 
-  desc 'New name to apply to application'
-  arg_name 'APP_NAME'
-  flag [:n, :name]
+  c.desc 'New name to apply to application'
+  c.arg_name 'APP_NAME'
+  c.flag [:n, :name]
 
-  desc 'Old name of application'
-  arg_name 'APP_NAME'
-  flag [:o, :old]
+  c.desc 'Old name of application'
+  c.arg_name 'APP_NAME'
+  c.flag [:o, :old]
 
 
-  action do |global_options,options,args|
+  c.action do |global_options,options,args|
     Pagoda::Command::App.new(global_options,options,args).rename
   end
 end

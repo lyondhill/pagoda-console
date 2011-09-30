@@ -11,21 +11,23 @@ unless File.respond_to? :realpath
   end
 end
 $: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+
 require 'rubygems'
 require 'gli'
+
 require 'pagoda/cli/version'
-require 'pagoda/cli/common'
+require 'pagoda/cli/override'
 
 # command = ARGV.shift.strip rescue 'help'
-# Pagoda::Runner.go(command, ARGV.dup)
+include GLI
+config_file '.pagodarc'
 
-include Pagoda::CLI::Common
+# include Pagoda::CLI::Common
 
 program_desc 'Command line client for Pagodabox'
 
 version Pagoda::CLI::VERSION
 
-config_file '.pagodarc'
 
 desc "Username created on pagodabox"
 arg_name "Username"
@@ -49,7 +51,8 @@ GLI::DefaultHelpCommand.skips_pre = true
 
 pre do |global,command,options,args|
   # Pre logic here
-  pp global
+  # require 'pp'
+  # pp global
   # Return true to proceed; false to abourt and not call the
   # chosen command
   # Use skips_pre before a command to skip this block
@@ -62,9 +65,8 @@ pre do |global,command,options,args|
     if command and not global[:username] and not global[:password]
       puts "it appears this is the first time you have used our client"
       user, password = Pagoda::Command::Base.ask_for_credentials
-      GLI.commands[:config].execute({}, {}, [ 'username', user     ])
-      GLI.commands[:config].execute({}, {}, [ 'password', password ])
-      global.merge!(username: user, password: password)
+      GLI.run(["-u",user,'-p',password,'initconfig', '--force'])
+      global.merge!(:username => user, :password => password)
     end
 
     true

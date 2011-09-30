@@ -2,7 +2,7 @@
 require 'pagoda/cli/version'
 require 'pagoda/cli/core_ext'
 require 'pagoda/cli/helpers'
-require 'pagoda/cli/config'
+# require 'pagoda/cli/config'
 require 'pagoda/cli/commands'
 
 module Pagoda
