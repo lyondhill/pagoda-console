@@ -82,11 +82,11 @@ module Pagoda
       end
       
       def remote
-        options[:remote]
+        options[:remote] || "pagoda"
       end
 
       def app(soft_fail=false)
-        if app = globals[:app] || options[:app]
+        if app = globals[:app] || options[:app] || args.first
           app
         elsif app = extract_app_from_git_config
           app
@@ -141,6 +141,10 @@ module Pagoda
       def find_branch
         git "name-rev --refs=$(git symbolic-ref HEAD) --name-only HEAD"
       end
+
+      def home_dir
+        File.expand_path("~")
+      end
       
       def find_commit
         git "rev-parse --verify HEAD"
@@ -158,6 +162,7 @@ module Pagoda
       end
 
       def loop_transaction(app_name = nil)
+        return #{ because loop transactions will be awesome in the future }
         finished = false
         until finished
           display ".", false, 0

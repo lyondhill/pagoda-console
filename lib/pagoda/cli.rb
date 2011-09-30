@@ -2,8 +2,6 @@
 require 'pagoda/cli/version'
 require 'pagoda/cli/core_ext'
 require 'pagoda/cli/helpers'
-require 'pagoda/cli/auth'
-require 'pagoda/cli/runner'
 require 'pagoda/cli/config'
 require 'pagoda/cli/commands'
 

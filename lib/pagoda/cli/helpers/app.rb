@@ -27,40 +27,28 @@ module Pagoda
         display "//////////////////////////////////"
         display "name       :  #{info[:name]}"
         display "clone_url  :  #{info[:git_url]}"
-        display  
-        display "owner"
-        display "username :  #{info[:owner][:username]}", true, 2
-        display "email    :  #{info[:owner][:email]}", true, 2
-        display  
-        display "collaborators"
-        if info[:collaborators].any?
-          info[:collaborators].each do |collaborator|
-            display "username :  #{collaborator[:username]}", true, 2
-            display "email    :  #{collaborator[:email]}", true, 2
-          end
-        else
-          display "(none)", true, 2
-        end
+        display "State      :  #{info[:state]}"
         display
       end
 
       def rename
         # will be implemented once we have it implemented in the pagoda kernel
-        new_name = option_value("-n", "--name") || args.first
+        new_name = options[:name] || args.first
         error "I need the new name" unless new_name
-        client.app_rename(app, new_name)
+        puts client.app_update(app, {:name => new_name})
         display "Successfully changed name to #{new_name}"
+      # rescue
+      #   raise "Given name was either invalid or already in use"
       end
 
       def init
-        id = client.app_info(app)[:id]
+        id = client.app_info(app)[:_id]
         create_git_remote(id, remote)
       end
 
       def clone
-        app_name = globals[:app] || options[:app] || args.first
-        error "I need the app you would like to clone" unless app_name
-        id = client.app_info(app)[:id]
+        error "I need the app you would like to clone" unless app
+        id = client.app_info(app)[:_id]
         git "clone git@pagodabox.com:#{id}.git #{app}"
         Dir.chdir(app)
         git "config --add pagoda.id #{id}"
@@ -118,7 +106,11 @@ module Pagoda
       def create
         name = args.shift.downcase.strip rescue nil
         if client.app_available?(name)
-          id = client.app_create(name)
+          puts "available"
+          id = client.app_create(name)[:_id]
+          puts id
+          puts remote
+          puts "client called app_create"
           display("Creating #{name}...", false)
           loop_transaction
           create_git_remote(id, remote)
@@ -130,10 +122,8 @@ module Pagoda
       alias :register :create
 
       def deploy
-        app
         display
-        if option_value(nil, "--latest")
-          puts "got options"
+        if options[:latest]
           client.app_deploy_latest(app)
           display "+> deploying to latest commit point on github...", false
           loop_transaction
@@ -148,17 +138,17 @@ module Pagoda
         end
       end
 
-      def rewind
+      def rollback
         app
         display
-        transaction = client.app_rewind(app)
+        transaction = client.app_rollback(app)
         display "+> undo...", false
         loop_transaction
         display "+> done"
         display
       end
-      alias :rollback :rewind
-      alias :undo :rewind
+      alias :rewind :rollback
+      alias :undo :rollback
       
       # def fast_forward
       #   app
@@ -175,11 +165,18 @@ module Pagoda
 
       def destroy
         display
-        if confirm ["Are you totally completely sure you want to delete #{app} forever and ever?", "THIS CANNOT BE UNDONE! (y/n)"]
+        if options[:force]
           display "+> Destroying #{app}"
           client.app_destroy(app)
           display "+> #{app} has been successfully destroyed. RIP #{app}."
           remove_app(app)
+        else
+          if confirm ["Are you totally completely sure you want to delete #{app} forever and ever?", "THIS CANNOT BE UNDONE! (y/n)"]
+            display "+> Destroying #{app}"
+            client.app_destroy(app)
+            display "+> #{app} has been successfully destroyed. RIP #{app}."
+            remove_app(app)
+          end
         end
         display
       end

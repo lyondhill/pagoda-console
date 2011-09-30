@@ -7,7 +7,7 @@ command :list do
 
   action do |global_options,options,args|
 
-    app = ::Pagoda::Command::App.new(args)
+    app = ::Pagoda::Command::App.new(global_options,options,args)
     app.list
 
   end

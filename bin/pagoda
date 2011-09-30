@@ -21,7 +21,7 @@ require 'pagoda/cli/common'
 
 include Pagoda::CLI::Common
 
-program_desc 'Describe your application here'
+program_desc 'Command line client for Pagodabox'
 
 version Pagoda::CLI::VERSION
 
