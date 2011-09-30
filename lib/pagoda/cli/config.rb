@@ -26,13 +26,13 @@ module Pagoda
 
       def execute(global_options,options,arguments)
 
-        if options.blank? and arguments.blank?
-          GLI.commands[:help].execute(global, {}, [ name ])
+        if options.dup.delete_if { |k,v| v.blank? }.blank? and arguments.blank?
+          GLI.commands[:help].execute(global_options, {}, [ name ])
         else
 
-          pp global_options
-          pp options
-          pp arguments
+          # pp global_options
+          # pp options
+          # pp arguments
 
           if !File.exist?(@filename)
             FileUtils.mkdir_p(File.dirname(@filename))
@@ -41,19 +41,40 @@ module Pagoda
           if options[:list]
             raise "config file has not been created yet" if !File.exist?(@filename)
 
-            data = File.open(@@config_file) { |file| YAML::load(file) }
-            puts data.to_yaml
+            begin
+              data = File.open(@@config_file) { |file| YAML::load(file) }
+              puts data.to_yaml
+            rescue
+              FileUtils.rm_rf(@filename)
+              raise "invalid config file"
+            end
           else
-            config = global_options
-            config[COMMANDS_KEY] = {}
-            GLI.commands.each do |name,command|
-              if (command != self) && (name != :rdoc) && (name != :help)
-                config[COMMANDS_KEY][name.to_sym] = {} if command != self
+            begin
+              config = File.open(@@config_file) { |file| YAML::load(file) }
+            rescue
+              FileUtils.rm_rf(@filename)
+            ensure
+              config ||= {}
+            end
+
+            if arguments.length == 2
+              config[arguments[0]] = arguments[1]
+              File.open(@filename, 'w') do |file|
+                YAML.dump(config, file)
               end
+            else
+              puts config[arguments[0]]
             end
-            File.open(@filename,'w') do |file|
-              YAML.dump(config,file)
-            end
+            # config = global_options
+            # config[COMMANDS_KEY] = {}
+            # GLI.commands.each do |name,command|
+            #   if (command != self) && (name != :rdoc) && (name != :help)
+            #     config[COMMANDS_KEY][name.to_sym] = {} if command != self
+            #   end
+            # end
+            # File.open(@filename,'w') do |file|
+            #   YAML.dump(config,file)
+            # end
           end
 
         end
