@@ -21,7 +21,7 @@ require 'pagoda/cli/common'
 
 include Pagoda::CLI::Common
 
-program_desc 'Describe your application here'
+program_desc 'Command line client for Pagodabox'
 
 version Pagoda::CLI::VERSION
 
@@ -46,11 +46,6 @@ require 'pagoda/cli/commands'
 require 'pagoda/cli'
 
 pre do |global,command,options,args|
-  # Pre logic here
-  # Return true to proceed; false to abourt and not call the
-  # chosen command
-  # Use skips_pre before a command to skip this block
-  # on that command only
   unless global[:username] && global[:password]
     puts "it appears this is the first time you have used our client"
     user, password = Pagoda::Command::Base.ask_for_credentials

@@ -24,28 +24,28 @@ module Pagoda
       end
     end
     
-    def option_value(short_hand = nil, long_hand = nil)
-      match = false
-      value = nil
+    # def option_value(short_hand = nil, long_hand = nil)
+    #   match = false
+    #   value = nil
       
-      if short_hand
-        if ARGV.include?(short_hand)
-          value = ARGV[ARGV.index(short_hand) + 1]
-          match = true
-        end
-      end
-      if long_hand && !match
-        if match = ARGV.grep(/#{long_hand}.*/).first
-          if match.include? "="
-            value = match.split("=").last
-          else
-            value = true
-          end
-        end
-      end
+    #   if short_hand
+    #     if ARGV.include?(short_hand)
+    #       value = ARGV[ARGV.index(short_hand) + 1]
+    #       match = true
+    #     end
+    #   end
+    #   if long_hand && !match
+    #     if match = ARGV.grep(/#{long_hand}.*/).first
+    #       if match.include? "="
+    #         value = match.split("=").last
+    #       else
+    #         value = true
+    #       end
+    #     end
+    #   end
       
-      value
-    end
+    #   value
+    # end
 
     def format_date(date)
       date = Time.parse(date) if date.is_a?(String)
@@ -104,11 +104,17 @@ module Pagoda
       %x{ git #{flattened_args} 2>&1 }.strip
     end
 
-
     def create_git_remote(id, remote)
       error "you do not have git installed on your computer" unless has_git?
       error "this remote is already in use on this repo" if git('remote').split("\n").include?(remote)
-      error(["repo has not been initialized." , "try 'git init'"]) unless File.directory?(".git")
+      unless File.directory?(".git")
+        if ask "git has not been initialized yet, would you like us to do this for you? "
+          display "git repo is being created in '#{Dir.pwd}'"
+          git "init"
+        else
+          error(["repo has not been initialized." , "try 'git init'"]) 
+        end
+      end
       git "remote add #{remote} git@pagodabox.com:#{id}.git"
       git "config --add pagoda.id #{id}"
       display "Git remote #{remote} added"
@@ -127,6 +133,7 @@ end
 
 require 'pagoda/cli/helpers/base'
 require 'pagoda/cli/helpers/app'
-require 'pagoda/cli/helpers/auth'
+require 'pagoda/cli/helpers/key'
+# require 'pagoda/cli/helpers/auth'
 require 'pagoda/cli/helpers/help'
 require 'pagoda/cli/helpers/tunnel'
