@@ -58,7 +58,7 @@ module Pagoda
       end
 
       def clone
-        app_name = option_value("-a","--app") || args.first
+        app_name = globals[:app] || options[:app] || args.first
         error "I need the app you would like to clone" unless app_name
         id = client.app_info(app)[:id]
         git "clone git@pagodabox.com:#{id}.git #{app}"
