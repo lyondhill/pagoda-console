@@ -54,7 +54,7 @@ pre do |global,command,options,args|
   # Use skips_pre before a command to skip this block
   # on that command only
 
-  if ARGV.join("") =~ /(help|-h|--help)/
+  if global[:help] or options[:help]
     GLI.commands[:help].execute(global, {}, [ command.name ])
     false
   else

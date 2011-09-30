@@ -1,3 +1,5 @@
+require 'pagoda/cli/config'
+
 module Pagoda
   module CLI
     module Common
@@ -10,8 +12,18 @@ module Pagoda
         else
           @@config_file = File.join(File.expand_path('~'),filename)
         end
-        commands[:initconfig] = InitConfig.new(@@config_file)
+        commands[:config] = Pagoda::CLI::Config.new(@@config_file)
         @@config_file
+      end
+
+      def parse_config # :nodoc:
+        return nil if @@config_file.nil?
+        require 'yaml'
+        if File.exist?(@@config_file)
+          File.open(@@config_file) { |file| YAML::load(file) }
+        else
+          {}
+        end
       end
 
       def command(*names, &block)
