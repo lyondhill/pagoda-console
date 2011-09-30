@@ -1,8 +1,8 @@
-desc 'You must specify an app name to clone.'
-arg_name 'Describe arguments to clone here'
+desc 'Clone an application from pagodabox'
+arg_name 'Application Name'
 command :clone do
 
-  desc 'The app name for Pagoda Box'
+  desc 'Your application name on pagodabox'
   arg_name 'APP_NAME'
   flag [:a, :app]
 

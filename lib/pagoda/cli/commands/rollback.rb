@@ -1,8 +1,7 @@
-desc 'Describe rollback here'
-arg_name 'Describe arguments to rollback here'
+desc 'Rollback your repo to whatever item it was on last'
 command :rollback do
 
-  desc 'The app name for Pagoda Box'
+  desc 'Application to be rolled back'
   arg_name 'APP_NAME'
   flag [:a, :app]
 

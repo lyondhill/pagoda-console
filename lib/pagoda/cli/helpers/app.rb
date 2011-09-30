@@ -18,7 +18,6 @@ module Pagoda
         end
         display
       end
-      alias :index :list
 
       def info
         display
@@ -38,7 +37,7 @@ module Pagoda
         puts client.app_update(app, {:name => new_name})
         display "Successfully changed name to #{new_name}"
       # rescue
-      #   raise "Given name was either invalid or already in use"
+      #   error "Given name was either invalid or already in use"
       end
 
       def init
@@ -56,53 +55,6 @@ module Pagoda
         display "repo has been added"
       end
 
-      # def create
-      #   if app_name = app(true)
-      #     error ["This project is already launched and paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
-      #   end
-        
-      #   unless locate_app_root
-      #     error ["Unable to find git config in this directory or in any parent directory"]
-      #   end
-        
-      #   unless clone_url = extract_git_clone_url
-      #     errors = []
-      #     errors << "It appears you are using git (fantastic)."
-      #     errors << "However we only support git repos hosted with github."
-      #     errors << "Please ensure your repo is hosted with github."
-      #     error errors
-      #   end
-        
-      #   unless name = args.dup.shift
-      #     error "Please Specify an app name ie. 'pagoda launch awesomeapp'"
-      #   end
-        
-      #   display
-      #   display "+> Registering #{name}"
-      #   client.app_create(name, clone_url)
-      #   display "+> Launching...", false
-      #   loop_transaction(name)
-      #   write_app(name, clone_url)
-      #   display "+> #{name} launched"
-        
-      #   unless option_value(nil, "--latest")
-      #     Pagoda::Runner.run_internal("app:deploy", args)
-      #   end
-        
-      #   if option_value(nil, "--with-mysql")
-      #     Pagoda::Runner.run_internal("db:create", args)
-      #   end
-        
-      #   display "-----------------------------------------------"
-      #   display
-      #   display "LIVE URL    : http://#{name}.pagodabox.com"
-      #   display "ADMIN PANEL : http://dashboard.pagodabox.com"
-      #   display
-      #   display "-----------------------------------------------"
-      #   display
-        
-      # end
-
       def create
         name = args.shift.downcase.strip rescue nil
         if client.app_available?(name)
@@ -118,8 +70,6 @@ module Pagoda
           error "App name is already taken"
         end
       end
-      alias :launch :create
-      alias :register :create
 
       def deploy
         display
@@ -147,8 +97,6 @@ module Pagoda
         display "+> done"
         display
       end
-      alias :rewind :rollback
-      alias :undo :rollback
       
       # def fast_forward
       #   app
@@ -180,100 +128,6 @@ module Pagoda
         end
         display
       end
-      alias :delete :destroy
-
-      # def pair
-      #   if app_name = app(true)
-      #     error ["This project is paired to #{app_name}.", "To unpair run 'pagoda unpair'"]
-      #   end
-      #   unless locate_app_root
-      #     error ["Unable to find git config in this directory or in any parent directory"]
-      #   end
-      #   unless my_repo = extract_git_clone_url
-      #     errors = []
-      #     errors << "It appears you are using git (fantastic)."
-      #     errors << "However we only support git repos hosted with github."
-      #     errors << "Please ensure your repo is hosted with github."
-      #     error errors
-      #   end
-        
-      #   display
-      #   display "+> Locating deployed app with matching git repo"
-        
-      #   apps = client.app_list
-        
-      #   matching_apps = []
-      #   apps.each do |a|
-      #     if a[:git_url] == my_repo
-      #       matching_apps.push a
-      #     end
-      #   end
-        
-      #   if matching_apps.count > 1
-      #     if name = app(true) || ARGV.first
-      #       assign_app = nil
-      #       matching_apps.each do |a|
-      #         assign_app = a if a[:name] == name
-      #       end
-      #       if assign_app
-      #         display "+> Pairing this repo to deployed app - #{assign_app[:name]}"
-      #         pair_with_remote(assign_app)
-      #         display "+> Repo is now paired to '#{assign_app[:name]}'"
-      #         display
-      #       else
-      #         error "#{name} is not found among your launched app list"
-      #       end
-      #     else
-      #       errors = []
-      #       errors << "Multiple matches found"
-      #       errors << ""
-      #       matching_apps.each do |match|
-      #         errors << "-> #{match[:name]}"
-      #       end
-      #       errors << ""
-      #       errors << "You have more then one app that uses this repo."
-      #       errors << "Please specify which app you would like to pair to."
-      #       errors << ""
-      #       errors << "ex: pagoda pair #{matching_apps[0][:name]}"
-      #       error errors
-      #     end
-      #   elsif matching_apps.count == 1
-      #     match = matching_apps.first
-      #     display "+> Pairing this repo to deployed app - #{match[:name]}"
-      #     pair_with_remote match
-      #     display "+> Repo is now paired to '#{match[:name]}'"
-      #     display
-      #   else
-      #     error "Current git repo doesn't match any launched app repos"
-      #   end
-      # end
-      
-      # def unpair
-      #   app
-      #   display
-      #   display "+> Unpairing this repo"
-      #   remove_app(app)
-      #   display "+> Free at last!"
-      #   display
-      # end
-    
-    # protected
-      
-    #   def pair_with_remote(app)
-    #     my_app_list = read_apps
-    #     current_root = locate_app_root
-    #     in_list = false
-    #     my_app_list.each do |app_str|
-    #       app_arr = app_str.split(" ")
-    #       if app[:git_url] == app_arr[1] && app[:name] == app_arr[0] || app_arr[2] == current_root
-    #         in_list = true
-    #       end
-    #     end
-    #     unless in_list
-    #       add_app app[:name]
-    #     end
-    #   end
-
 
     end
   end  

@@ -7,20 +7,27 @@ module Pagoda
       include GLI
 
       def config_file(filename)
+        puts "CONFIGFILE = #{filename}"
         if filename =~ /^\//
           @@config_file = filename
         else
           @@config_file = File.join(File.expand_path('~'),filename)
         end
+        puts @@config_file
         commands[:config] = Pagoda::CLI::Config.new(@@config_file)
+        puts commands[:config]
         @@config_file
       end
 
       def parse_config # :nodoc:
+        puts "PARSE CONFIG"
         return nil if @@config_file.nil?
+        puts "CINFIG FILE NOT NIL"
         require 'yaml'
         if File.exist?(@@config_file)
-          File.open(@@config_file) { |file| YAML::load(file) }
+          puts "CONFIG FILE EXISTS"
+          yaml = File.open(@@config_file) { |file| YAML::load(file) }
+          puts yaml
         else
           {}
         end

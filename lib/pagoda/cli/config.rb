@@ -25,14 +25,13 @@ module Pagoda
       end
 
       def execute(global_options,options,arguments)
-
         if options.dup.delete_if { |k,v| v.blank? }.blank? and arguments.blank?
           GLI.commands[:help].execute(global_options, {}, [ name ])
         else
 
-          # pp global_options
-          # pp options
-          # pp arguments
+          pp global_options
+          pp options
+          pp arguments
 
           if !File.exist?(@filename)
             FileUtils.mkdir_p(File.dirname(@filename))

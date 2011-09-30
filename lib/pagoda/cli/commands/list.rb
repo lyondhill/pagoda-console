@@ -1,5 +1,4 @@
-desc 'Describe list here'
-arg_name 'Describe arguments to list here'
+desc 'List information on pagodabox'
 command :list do
 
   desc "Web Components"

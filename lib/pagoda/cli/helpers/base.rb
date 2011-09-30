@@ -76,6 +76,8 @@ module Pagoda
       def client
         @client ||= Pagoda::Client.new(user, password)
       end
+
+      protected
       
       def shell(cmd)
         FileUtils.cd(Dir.pwd) {|d| return `#{cmd}`}
@@ -96,7 +98,7 @@ module Pagoda
           if soft_fail
             false
           else
-            raise "Unable to find the app. please specify using -a or --app"
+            error "Unable to find the app. please specify using -a or --app"
           end
         end
       end

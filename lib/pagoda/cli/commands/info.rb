@@ -1,8 +1,8 @@
-desc 'Describe info here'
-arg_name 'Describe arguments to info here'
+desc 'Get information for a specific app'
+arg_name 'Application Name'
 command :info do
 
-  desc 'The app name for Pagoda Box'
+  desc 'App on pagodabox'
   arg_name 'APP_NAME'
   flag [:a, :app]
 

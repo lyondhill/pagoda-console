@@ -1,5 +1,4 @@
-desc 'Describe deploy here'
-arg_name 'Describe arguments to deploy here'
+desc 'Deploy your code to your live server'
 command :deploy do
 
   desc "Deploy the latest, Without this we will deploy the current branch/commit"

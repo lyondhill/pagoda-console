@@ -1,8 +1,8 @@
-desc 'Describe create here'
-arg_name 'Describe arguments to create here'
+desc 'Create a new application on pagodabox'
+arg_name 'New application name'
 command :create do
 
-  desc 'The app name for Pagoda Box'
+  desc 'New app name'
   arg_name 'APP_NAME'
   flag [:a, :app]
 
