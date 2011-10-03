@@ -23,7 +23,6 @@ describe Pagoda::Command::App do
     @app.list
   end
 
-
   it "displays the app info" do
     response = {
       :name => "name",

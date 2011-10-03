@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'fakefs'
 
 describe Pagoda::Command::Base do
 
@@ -31,7 +30,7 @@ describe Pagoda::Command::Base do
     `git config --unset pagoda.id`
   end
 
-  
+
   
 
 

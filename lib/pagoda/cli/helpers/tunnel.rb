@@ -5,7 +5,7 @@ module Pagoda::Command
 
     def run
       component_name = args.first
-      component = client.app_component_info(app, component_name)
+      component = client.component_info(app, component_name)
       if component[:tunnelable]
         type = component[:type].to_sym
         component_id = component[:_id]
@@ -14,7 +14,7 @@ module Pagoda::Command
         error "Either the component is not tunnelable or you do not have access"
       end
     rescue
-      error "Unable to access tunnel."
+      error "Done Brokedon! Either the component does not exist or it is not tunnelable"
     end
 
   end

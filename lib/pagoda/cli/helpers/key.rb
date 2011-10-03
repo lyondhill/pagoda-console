@@ -17,16 +17,15 @@ module Pagoda
       end
 
       def push_existing_key
-        if running_on_windows?
-          get_key_windows
-        else
-          get_key
-        end
+        get_key
       end
 
 
       def get_key
         if file_path = options[:file] || args.first
+          unless file_path[0] == '/'
+            file_path = Dir.pwd << '/' << file_path
+          end
           if File.exists?(file_path)
             send_key_file(file_path)
           else
