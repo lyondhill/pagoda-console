@@ -83,9 +83,12 @@ module Pagoda
 
     def create_git_remote(id, remote)
       error "you do not have git installed on your computer" unless has_git?
-      error "this remote is already in use on this repo" if git('remote').split("\n").include?(remote)
+      unless git('remote').split("\n").include?(remote)
+        display "this remote (#{remote}) is already in use on this repo" 
+        remote = ask "what would you like to call this remote? "
+      end
       unless File.directory?(".git")
-        if ask "git has not been initialized yet, would you like us to do this for you? "
+        if confirm "git has not been initialized yet, would you like us to do this for you? (y/n)?"
           display "git repo is being created in '#{Dir.pwd}'"
           git "init"
         else
@@ -111,6 +114,4 @@ end
 require 'pagoda/cli/helpers/base'
 require 'pagoda/cli/helpers/app'
 require 'pagoda/cli/helpers/key'
-# require 'pagoda/cli/helpers/auth'
-require 'pagoda/cli/helpers/help'
 require 'pagoda/cli/helpers/tunnel'

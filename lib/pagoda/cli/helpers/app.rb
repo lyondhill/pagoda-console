@@ -14,7 +14,7 @@ module Pagoda
             display "- #{app[:name]}"
           end
         else
-          error ["looks like you haven't launched any apps", "type 'pagoda launch' to launch this project"]
+          error ["looks like you haven't launched any apps", "type 'pagoda create' to creat this project on pagodabox"]
         end
         display
       end
@@ -31,13 +31,12 @@ module Pagoda
       end
 
       def rename
-        # will be implemented once we have it implemented in the pagoda kernel
         new_name = options[:name] || args.first
         error "I need the new name" unless new_name
         puts client.app_update(app, {:name => new_name})
         display "Successfully changed name to #{new_name}"
-      # rescue
-      #   error "Given name was either invalid or already in use"
+      rescue
+        error "Given name was either invalid or already in use"
       end
 
       def init
@@ -56,18 +55,14 @@ module Pagoda
       end
 
       def create
-        name = args.shift.downcase.strip rescue nil
+        name = app
         if client.app_available?(name)
-          puts "available"
           id = client.app_create(name)[:_id]
-          puts id
-          puts remote
-          puts "client called app_create"
           display("Creating #{name}...", false)
           loop_transaction
           create_git_remote(id, remote)
         else
-          error "App name is already taken"
+          error "App name (#{name}) is already taken"
         end
       end
 

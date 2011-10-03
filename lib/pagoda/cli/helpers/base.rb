@@ -77,7 +77,7 @@ module Pagoda
         @client ||= Pagoda::Client.new(user, password)
       end
 
-      protected
+      # protected
       
       def shell(cmd)
         FileUtils.cd(Dir.pwd) {|d| return `#{cmd}`}
@@ -121,7 +121,6 @@ module Pagoda
         remotes = {}
         original_dir = Dir.pwd
         Dir.chdir(base_dir)
-
         git("remote -v").split("\n").each do |remote|
           name, url, method = remote.split(/\s/)
           if url =~ /^git@pagodabox.com:([\w\d-]+)\.git$/
@@ -152,8 +151,8 @@ module Pagoda
         git "rev-parse --verify HEAD"
       end
       
-      def extract_git_clone_url(soft=false)
-        git("config remote.pagoda.url")
+      def extract_git_clone_url(remote="pagoda")
+        git("config remote.#{remote}.url")
       end
       
       def locate_app_root(dir=Dir.pwd)
