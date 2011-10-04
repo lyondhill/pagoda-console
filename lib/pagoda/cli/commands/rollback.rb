@@ -1,4 +1,4 @@
-desc 'Rollback your repo to whatever deploy it was on last'
+desc 'Rollback your repo to the deploy it was on last'
 command :rollback do |c|
 
   c.desc 'Application to be rolled back'

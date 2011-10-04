@@ -100,6 +100,11 @@ module Pagoda
       display "Git remote #{remote} added"
     end
 
+    def remove_git_remote(app)
+      git "remote rm pagoda"
+      git "config --unset pagoda.id"
+    end
+
     def build_indent(level=1)
       indent = ""
       level.times do

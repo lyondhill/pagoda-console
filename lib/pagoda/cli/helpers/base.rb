@@ -51,13 +51,13 @@ module Pagoda
           silently(system "stty echo")
         rescue
         end
-          
+                  
       end
       
       attr_reader :client
       attr_reader :globals
       attr_reader :options
-      attr_accessor :args
+      attr_reader :args
 
       def initialize(globals, options, args)
         @globals = globals

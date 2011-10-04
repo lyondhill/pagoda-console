@@ -1,5 +1,5 @@
-desc 'Initialize your computer with of your pagodabox repo.'
-arg_name 'Application to pair with'
+desc 'Connect your local repo with your pagodabox repo.'
+arg_name 'APP_NAME'
 command :init do |c|
 
   c.desc 'App name initializing to'

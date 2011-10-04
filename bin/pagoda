@@ -80,6 +80,9 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
+  if exception.class == RestClient::Unauthorized
+    Pagoda::Command::Base.error "Username or Password is invald"
+  end
 
   # Error logic here
   # return false to skip default error handling

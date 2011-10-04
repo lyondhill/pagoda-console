@@ -1,4 +1,4 @@
-desc 'Deploy your code to your live server'
+desc 'Deploy your code to your live pagodabox app'
 command :deploy do |c|
 
   c.desc "Deploy the latest, Without this we will deploy the current branch/commit"
