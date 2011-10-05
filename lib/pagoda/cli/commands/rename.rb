@@ -3,7 +3,7 @@ command :rename do |c|
 
   c.desc 'New name to apply to application'
   c.arg_name 'APP_NAME'
-  c.flag [:n, :name]
+  c.flag [:n, :new]
 
   c.desc 'Old name of application'
   c.arg_name 'APP_NAME'

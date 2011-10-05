@@ -3,43 +3,6 @@ module Pagoda
 
     class App < Base
 
-      # helpful stuff
-      def setup
-        display "Welcome to Pagodabox"
-        display " -- thank you for useing our easy button"
-        display "at this point you should have already created an account on pagodabox.com"
-        if confirm("Would you like to launch your first app (y/n)? ")
-          display "Great!"
-          if confirm("have you navigated to the folder of the app you would like to launch in pagodabox (y/n)?")
-            display "GReat!"
-            error [
-              "you do not have git installed on your computer",
-              "Pagodabox uses git.",
-              "please install git before and then 'pagoda create <app_name>'"
-            ] unless has_git?
-            options[:app] = ask("what would you like to call your app? ")
-            create
-          else
-            file_path = ask("what folder would you like to launch on pagodabox? ")
-            unless file_path[0] == '/'
-              file_path = "#{Dir.pwd}/#{file_path}"
-            end
-            Dir.chdir(file_path)
-            error [
-              "you do not have git installed on your computer",
-              "Pagodabox uses git.",
-              "please install git before and then 'pagoda create <app_name>'"
-            ] unless has_git?
-            options[:app] = ask("what would you like to call your app? ")
-            create
-            
-          end
-        else
-          display "sorry to hear that."
-          display "when you are ready navigate to the repo folder and do a pagoda create <app_name>"
-        end
-
-      end
 
       def list
         apps = client.app_list
@@ -60,17 +23,27 @@ module Pagoda
       def info
         display
         info = client.app_info(app)
-        display "INFO - #{info[:name]}"
+        display "INFO - <app_name>"
         display "//////////////////////////////////"
-        display "name       :  #{info[:name]}"
-        display "clone_url  :  #{info[:git_url]}"
-        display "State      :  #{info[:state]}"
-        display
+        display "name        :  #{info[:name]}"
+        display ""
+        display "owner"
+        display "   username :  #{info[:owner][:username]}"
+        display "   email    :  #{info[:owner][:email]}"
+        display ""
+        display "collaborators"
+        info[:collaborators].each do |collab|
+        display "   username :  #{collab[:username]}"
+        display "   email    :  #{collab[:email]}"
+        end
+        display ""
+        display "ssh_portal  :  disabled"
+        display ""
       end
 
       def rename
         old_name = options[:old] || app
-        new_name = options[:name] || args.first
+        new_name = options[:new] || args.first
         error "I need the new name" unless new_name
         error "New name and existiong name cannot be the same" if new_name == old_name
         client.app_update(old_name, {:name => new_name})
@@ -90,7 +63,7 @@ module Pagoda
         Dir.chdir(app)
         git "config --add pagoda.id #{id}"
         Dir.chdir("..")
-        display "repo has been added"
+        display "+> Repo has been added. Navigate to folder #{app}."
       rescue
         error "We were not able to access that app"
       end
@@ -102,6 +75,7 @@ module Pagoda
           display("Creating #{name}...", false)
           loop_transaction
           create_git_remote(id, remote)
+          display "complete"
         else
           error "App name (#{name}) is already taken"
         end
@@ -109,15 +83,15 @@ module Pagoda
 
       def deploy
         display
-        if options[:branch] or options[:commit]
-          client.app_deploy(app, branch, commit)
-          display "+> deploying current branch and commit...", false
+        if option[:latest]
+          client.app_deploy_latest(app)
+          display "+> deploying to latest commit point on pagodabox...", false
           loop_transaction
           display "+> deployed"
           display
         else
-          client.app_deploy_latest(app)
-          display "+> deploying to latest commit point on pagodabox...", false
+          client.app_deploy(app, branch, commit)
+          display "+> deploying current branch and commit...", false
           loop_transaction
           display "+> deployed"
           display
