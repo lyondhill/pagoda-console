@@ -1,5 +1,4 @@
 desc 'Rename your application'
-arg_name 'Application name'
 command :rename do |c|
 
   c.desc 'New name to apply to application'

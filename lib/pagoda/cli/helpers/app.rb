@@ -32,7 +32,7 @@ module Pagoda
             ] unless has_git?
             options[:app] = ask("what would you like to call your app? ")
             create
-
+            
           end
         else
           display "sorry to hear that."
@@ -85,7 +85,6 @@ module Pagoda
       end
 
       def clone
-        error "I need the app you would like to clone" unless app
         id = client.app_info(app)[:_id]
         git "clone git@pagodabox.com:#{id}.git #{app}"
         Dir.chdir(app)
@@ -110,15 +109,15 @@ module Pagoda
 
       def deploy
         display
-        if options[:latest]
-          client.app_deploy_latest(app)
-          display "+> deploying to latest commit point on pagodabox...", false
+        if options[:branch] or options[:commit]
+          client.app_deploy(app, branch, commit)
+          display "+> deploying current branch and commit...", false
           loop_transaction
           display "+> deployed"
           display
         else
-          client.app_deploy(app, branch, commit)
-          display "+> deploying current branch and commit...", false
+          client.app_deploy_latest(app)
+          display "+> deploying to latest commit point on pagodabox...", false
           loop_transaction
           display "+> deployed"
           display

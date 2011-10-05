@@ -30,7 +30,8 @@ module Pagoda
     end
 
     def ask(message=nil, level=1)
-      display("#{message}", false, level) if message
+      (running_on_windows?) ? print("#{build_indent(level)}#{message}") : print("#{build_indent(level)}#{message}".blue)
+      STDOUT.flush      
       STDIN.gets.strip
     end
     
@@ -83,7 +84,7 @@ module Pagoda
 
     def create_git_remote(id, remote)
       error "you do not have git installed on your computer" unless has_git?
-      unless git('remote').split("\n").include?(remote)
+      if git('remote').split("\n").include?(remote)
         display "Given remote (#{remote}) is already in use on this repo" 
         remote = ask "what would you like to call the new remote? "
       end
@@ -98,6 +99,10 @@ module Pagoda
       git "remote add #{remote} git@pagodabox.com:#{id}.git"
       git "config --add pagoda.id #{id}"
       display "Git remote #{remote} added"
+    end
+
+    def remove_app(app)
+      remove_git_remote(app)
     end
 
     def remove_git_remote(app)

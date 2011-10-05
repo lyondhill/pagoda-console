@@ -24,14 +24,4 @@ describe Pagoda::Command::Base do
     arg.app.should == "appnama"
   end
 
-  it "retrieves the app.id from git config" do
-    `git config --add pagoda.id someid`
-    @base.extract_app_from_git_config.should == "someid"
-    `git config --unset pagoda.id`
-  end
-
-
-  
-
-
 end

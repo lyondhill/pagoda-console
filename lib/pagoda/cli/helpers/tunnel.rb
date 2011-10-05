@@ -7,9 +7,10 @@ module Pagoda::Command
       component_name = args.first
       component = client.component_info(app, component_name)
       if component[:tunnelable]
-        type = component[:type].to_sym
+        type = component[:_type]
         component_id = component[:_id]
-        Pagoda::Tunnel.new(type, user, password, app, component_id).start
+        app_id = component[:app_id]
+        Pagoda::Tunnel.new(type, user, password, app_id, component_id).start
       else
         error "Either the component is not tunnelable or you do not have access"
       end

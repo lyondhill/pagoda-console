@@ -11,20 +11,18 @@ module Pagoda
           display "the best way to generate a key is with an external tool"
           display "We suggest using 'PuTTY'"
         else
-          `ssh-keygen`
+          (options[:file] ?  `ssh-keygen -f #{options[:file]}` : `ssh-keygen`)
           push_existing_key
         end
       end
 
       def push_existing_key
-        get_key
-      end
-
-
-      def get_key
         if file_path = options[:file] || args.first
           unless file_path[0] == '/'
             file_path = Dir.pwd << '/' << file_path
+          end
+          unless file_path.end_with?(".pub")
+            file_path << ".pub"
           end
           if File.exists?(file_path)
             send_key_file(file_path)
@@ -59,7 +57,8 @@ module Pagoda
         else
           error "that key is not the correct format"
         end
-
+      rescue RestClient::UnprocessableEntity
+        error "It Appears this key is already in use"
       end
 
     end
