@@ -22,12 +22,9 @@ require 'pagoda/cli/override'
 include GLI
 config_file '.pagodarc'
 
-# include Pagoda::CLI::Common
-
 program_desc 'Command line client for Pagodabox'
 
 version Pagoda::CLI::VERSION
-
 
 desc "Username created on pagodabox"
 arg_name "Username"

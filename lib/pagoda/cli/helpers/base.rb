@@ -1,5 +1,4 @@
 require 'pagoda-client'
-require 'iniparse'
 
 module Pagoda
   module Command
