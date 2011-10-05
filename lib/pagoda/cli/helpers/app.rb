@@ -15,7 +15,7 @@ module Pagoda
             display "- #{app[:name]}"
           end
         else
-          error ["looks like you haven't launched any apps", "type 'pagoda create' to creat this project on pagodabox"]
+          error ["looks like you haven't launched any apps", "type 'pagoda create' to create this project on pagodabox"]
         end
         display
       end
@@ -23,22 +23,23 @@ module Pagoda
       def info
         display
         info = client.app_info(app)
-        display "INFO - <app_name>"
+        display "INFO - #{info[:name]}"
         display "//////////////////////////////////"
         display "name        :  #{info[:name]}"
-        display ""
+        display "clone url   :  git@pagodabox.com:#{info[:_id]}.git"
+        display
         display "owner"
         display "   username :  #{info[:owner][:username]}"
         display "   email    :  #{info[:owner][:email]}"
-        display ""
+        display
         display "collaborators"
         info[:collaborators].each do |collab|
         display "   username :  #{collab[:username]}"
         display "   email    :  #{collab[:email]}"
         end
-        display ""
-        display "ssh_portal  :  disabled"
-        display ""
+        display
+        display "ssh_portal  :  #{info[:ssh] ? 'enabled' : 'disabled'}"
+        display
       end
 
       def rename
@@ -59,10 +60,12 @@ module Pagoda
 
       def clone
         id = client.app_info(app)[:_id]
+        display
         git "clone git@pagodabox.com:#{id}.git #{app}"
         Dir.chdir(app)
         git "config --add pagoda.id #{id}"
         Dir.chdir("..")
+        display
         display "+> Repo has been added. Navigate to folder #{app}."
       rescue
         error "We were not able to access that app"
@@ -75,7 +78,15 @@ module Pagoda
           display("Creating #{name}...", false)
           loop_transaction
           create_git_remote(id, remote)
-          display "complete"
+          display "#{name} created"
+          display "----------------------------------------------------"
+          display
+          display "LIVE URL    : http://#{name}.newpagodabox.com"
+          display "ADMIN PANEL : http://dashboard.newpagodabox.com/apps/#{name}"
+          display
+          display "----------------------------------------------------"
+          display
+          display "+> Use 'git push #{remote}' to push your code live"
         else
           error "App name (#{name}) is already taken"
         end
@@ -83,7 +94,7 @@ module Pagoda
 
       def deploy
         display
-        if option[:latest]
+        if options[:latest]
           client.app_deploy_latest(app)
           display "+> deploying to latest commit point on pagodabox...", false
           loop_transaction
@@ -116,6 +127,7 @@ module Pagoda
           remove_app(app)
         else
           if confirm ["Are you totally completely sure you want to delete #{app} forever and ever?", "THIS CANNOT BE UNDONE! (y/n)"]
+            display
             display "+> Destroying #{app}"
             client.app_destroy(app)
             display "+> #{app} has been successfully destroyed. RIP #{app}."

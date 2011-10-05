@@ -9,7 +9,7 @@ describe Pagoda::Command::App do
 
   it "Should error if no apps are found" do
     @app.client.stub(:app_list).and_return({})
-    @app.should_receive(:error).with(["looks like you haven't launched any apps", "type 'pagoda create' to creat this project on pagodabox"])
+    @app.should_receive(:error).with(["looks like you haven't launched any apps", "type 'pagoda create' to create this project on pagodabox"])
     @app.list
   end
 
@@ -25,19 +25,35 @@ describe Pagoda::Command::App do
 
   it "displays the app info" do
     response = {
-      :name => "name",
-      :git_url => "github.com",
-      :state => "CREATING"
+      _id: "4e8cabecbb71f99d10000043",
+      name: "myapp",
+      ssh: true,
+      owner: {
+        _id:"4e8c78d6bb71f99b33000003",
+        email: "lyon@delorum.com",
+        username: "lyon"
+        },
+      collaborators:[{_id: "4e8c78d6bb71f99b33000003",email: "lyon@delorum.com",username: "lyon"}]
     }
     @app.client.should_receive(:app_info).with("name").and_return(response)
-    @app.should_receive(:display).with(no_args).exactly(2).times
-    @app.should_receive(:display).with("INFO - name")
+    @app.should_receive(:display).with(no_args).exactly(5).times
+    @app.should_receive(:display).with("INFO - myapp")
     @app.should_receive(:display).with("//////////////////////////////////")
-    @app.should_receive(:display).with("name       :  name")
-    @app.should_receive(:display).with("clone_url  :  github.com")
-    @app.should_receive(:display).with("State      :  CREATING")
+    @app.should_receive(:display).with("name        :  myapp")
+    @app.should_receive(:display).with("clone url   :  git@pagodabox.com:4e8cabecbb71f99d10000043.git")
+    @app.should_receive(:display).with("owner")
+    @app.should_receive(:display).with("   username :  lyon")
+    @app.should_receive(:display).with("   email    :  lyon@delorum.com")
+    @app.should_receive(:display).with("collaborators")
+    @app.should_receive(:display).with("   username :  lyon")
+    @app.should_receive(:display).with("   email    :  lyon@delorum.com")
+    @app.should_receive(:display).with("ssh_portal  :  enabled")
     @app.info
   end
+
+
+
+
 
   it "Is able to create an application" do
     @app.stub(:app).and_return("application")

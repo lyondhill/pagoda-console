@@ -5,13 +5,16 @@ module Pagoda
     class Key < Base
 
       def generate_key_and_push
+        display 
         display "+> Generating a ssh key pair"
+        display 
         if running_on_windows?
           display "It appears you are running on windows"
           display "the best way to generate a key is with an external tool"
           display "We suggest using 'PuTTY'"
         else
           (options[:file] ?  `ssh-keygen -f #{options[:file]}` : `ssh-keygen`)
+          display
           push_existing_key
         end
       end
@@ -31,7 +34,6 @@ module Pagoda
           end
         else
           if File.exists?("#{home_dir}/.ssh/id_rsa.pub") || File.exists?("~/.ssh/id_dsa.pub")
-            display "+> getting your public key"
             if File.exists?("#{home_dir}/.ssh/id_rsa.pub")
               send_key_file("#{home_dir}/.ssh/id_rsa.pub")
             end
@@ -52,8 +54,8 @@ module Pagoda
         key = File.read(file).strip
         if key =~ /^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+/
           client.user_add_key(key)
-          display "registered key:"
-          display key
+          display "+> Pushing ssh key to Pagoda Box"
+          display "+> done"
         else
           error "that key is not the correct format"
         end

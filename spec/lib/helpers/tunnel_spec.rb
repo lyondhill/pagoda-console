@@ -7,10 +7,10 @@ describe Pagoda::Command::Tunnel do
   end
 
   it "will attempt to run the tunnel if it has all the correct credentials" do
-    @tunnel.client.stub(:component_info).and_return({:tunnelable => true, :type => "mysql", :_id => "theid142"})
-    guy = Pagoda::Tunnel.new(:mysql, "user", "pass","application", "theid142")
+    @tunnel.client.stub(:component_info).and_return({:tunnelable => true, :_type => "mysql", :_id => "theid142", :app_id => "appID"})
+    guy = Pagoda::Tunnel.new("mysql", "user", "pass","application", "theid142")
     guy.stub(:start).and_return false
-    Pagoda::Tunnel.should_receive(:new).with(:mysql, "user", "pass","application", "theid142").and_return(guy)
+    Pagoda::Tunnel.should_receive(:new).with("mysql", "user", "pass","appID", "theid142").and_return(guy)
     @tunnel.run
   end
 
