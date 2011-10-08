@@ -96,7 +96,7 @@ module Pagoda
           error(["repo has not been initialized." , "try 'git init'"])
         end
       end
-      git "remote add #{remote} git@pagodabox.com:#{id}.git"
+      git "remote add #{remote} git@git.pagodabox.com:#{id}.git"
       git "config --add pagoda.id #{id}"
       display "Git remote #{remote} added"
     end

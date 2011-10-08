@@ -59,7 +59,7 @@ describe Pagoda::Command::App do
     @app.stub(:app).and_return("application")
     @app.stub(:display)
     @app.client.should_receive(:app_available?).and_return(true)
-    @app.client.should_receive(:app_create).and_return({:_id => "1234"})
+    @app.client.should_receive(:app_create).and_return({:id => "1234"})
     @app.should_receive(:create_git_remote)
     @app.create
   end
@@ -88,7 +88,7 @@ describe Pagoda::Command::App do
   end
 
   it "can clone a pagoda repo" do
-    @app.client.stub(:app_info).and_return({:_id => "superawesomeid"})
+    @app.client.stub(:app_info).and_return({:id => "superawesomeid"})
     @app.should_receive(:git).with("clone git@pagodabox.com:superawesomeid.git name")
     @app.should_receive(:git).with("config --add pagoda.id superawesomeid")
     @app.stub(:display)

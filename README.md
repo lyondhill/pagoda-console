@@ -8,13 +8,10 @@ This client currently supports:
 
 * Application functions
   * Creation
-  * Scaling
+  * Clone
+  * init
   * Deploy
   * Rollback
-* Database functions
-  * Creation
-  * Scaling
-  * Destruction
 * Tunnel to live database
 
 ## How to use:

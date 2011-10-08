@@ -13,6 +13,7 @@ module Pagoda
           username = ask "Username: "
           display "Password: ", false
           password = running_on_windows? ? ask_for_password_on_windows : ask_for_password
+          api_key =  Pagoda::Client.new(user, password).api_key
           [username, password] # return
         end
 
@@ -87,7 +88,7 @@ module Pagoda
       end
 
       def app(soft_fail=false)
-        if app = globals[:app] || options[:app] || args.first
+        if app = globals[:app] || options[:app]
           app
         elsif app = extract_app_from_git_config
           app
@@ -122,7 +123,7 @@ module Pagoda
         Dir.chdir(base_dir)
         git("remote -v").split("\n").each do |remote|
           name, url, method = remote.split(/\s/)
-          if url =~ /^git@pagodabox.com:([\w\d-]+)\.git$/
+          if url =~ /^git@git.pagodabox.com:([\w\d-]+)\.git$/
             remotes[name] = $1
           end
         end
@@ -162,7 +163,7 @@ module Pagoda
       end
 
       def loop_transaction(app_name = nil)
-        return #{ because loop transactions will be awesome in the future }
+        # return #{ because loop transactions will be awesome in the future }
         finished = false
         until finished
           display ".", false, 0

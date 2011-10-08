@@ -4,6 +4,10 @@ command :deploy do |c|
   c.desc "Deploy the latest, Without this we will deploy the current branch/commit"
   c.switch [:l, :latest]
 
+  c.desc 'Your application name on pagodabox'
+  c.arg_name 'APP_NAME'
+  c.flag [:a, :app]
+
   c.desc "commit you would like to deploy to"
   c.arg_name "COMMIT"
   c.flag [:c, :commit]

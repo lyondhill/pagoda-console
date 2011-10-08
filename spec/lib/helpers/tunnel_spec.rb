@@ -7,7 +7,7 @@ describe Pagoda::Command::Tunnel do
   end
 
   it "will attempt to run the tunnel if it has all the correct credentials" do
-    @tunnel.client.stub(:component_info).and_return({:tunnelable => true, :_type => "mysql", :_id => "theid142", :app_id => "appID"})
+    @tunnel.client.stub(:component_info).and_return({:tunnelable => true, :_type => "mysql", :id => "theid142", :app_id => "appID"})
     guy = Pagoda::Tunnel.new("mysql", "user", "pass","application", "theid142")
     guy.stub(:start).and_return false
     Pagoda::Tunnel.should_receive(:new).with("mysql", "user", "pass","appID", "theid142").and_return(guy)
@@ -15,7 +15,7 @@ describe Pagoda::Command::Tunnel do
   end
 
   it "errors when the component is not tunnelable" do
-    @tunnel.client.stub(:component_info).and_return({:tunnelable => false, :type => "mysql", :_id => "theid142"})
+    @tunnel.client.stub(:component_info).and_return({:tunnelable => false, :type => "mysql", :id => "theid142"})
     @tunnel.should_receive(:error).with("Either the component is not tunnelable or you do not have access")
     @tunnel.run
   end

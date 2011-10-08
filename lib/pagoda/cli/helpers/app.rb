@@ -26,7 +26,7 @@ module Pagoda
         display "INFO - #{info[:name]}"
         display "//////////////////////////////////"
         display "name        :  #{info[:name]}"
-        display "clone url   :  git@pagodabox.com:#{info[:_id]}.git"
+        display "clone url   :  git@pagodabox.com:#{info[:id]}.git"
         display
         display "owner"
         display "   username :  #{info[:owner][:username]}"
@@ -54,12 +54,12 @@ module Pagoda
       end
 
       def init
-        id = client.app_info(app)[:_id]
+        id = client.app_info(app)[:id]
         create_git_remote(id, remote)
       end
 
       def clone
-        id = client.app_info(app)[:_id]
+        id = client.app_info(app)[:id]
         display
         git "clone git@pagodabox.com:#{id}.git #{app}"
         Dir.chdir(app)
@@ -74,7 +74,7 @@ module Pagoda
       def create
         name = app
         if client.app_available?(name)
-          id = client.app_create(name)[:_id]
+          id = client.app_create(name)[:id]
           display("Creating #{name}...", false)
           loop_transaction
           create_git_remote(id, remote)

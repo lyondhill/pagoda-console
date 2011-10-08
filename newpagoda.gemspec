@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["lyon@pagodabox.com", "andrew@delorum.com"]
   gem.description   = %q{Pagoda Box command line interface}
   gem.summary       = %q{Pagoda Box command line interface}
-  gem.homepage      = "www.pagodabox.com"
+  gem.homepage      = "http://www.pagodabox.com"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
