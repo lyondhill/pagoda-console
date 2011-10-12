@@ -4,10 +4,15 @@ module Pagoda::Command
   class Tunnel < Base
 
     def run
-      component_name = args.first
-      component = client.component_info(app, component_name)
-      require 'pp'
-      pp component
+      user_input = args.first
+      component = {}
+      if user_input =~ /^(web\d*)|(db\d*)|(cache\d*)|(worker\d*)$/
+        components = client.component_list(app)
+        components.delete_if {|x| x[:cuid] != user_input }
+        component = components[0]
+      else
+        component = client.component_info(app, component_name)
+      end
       if component[:tunnelable]
         type = component[:_type]
         component_id = component[:_id]
@@ -16,8 +21,7 @@ module Pagoda::Command
       else
         error "Either the component is not tunnelable or you do not have access"
       end
-    # rescue
-    #   error "Done Brokedon! Either the component does not exist or it is not tunnelable"
+
     end
 
   end
