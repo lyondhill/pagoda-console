@@ -164,15 +164,31 @@ module Pagoda
 
       def loop_transaction(app_name = nil)
         # return #{ because loop transactions will be awesome in the future }
-        finished = false
-        until finished
-          display ".", false, 0
-          sleep 1
-          if client.app_info(app_name || app)[:transactions].count < 1
-            finished = true
-            display
+        transaction_id = client.app_info(app)[:active_transaction_id]
+        old_active = client.transaction_info(app, transaction_id)
+        display "+> #{old_active[:description]}"
+        while true
+          active = client.transaction_info(app, transaction_id)
+          break if active[:state] == "complete"
+          unless active == old_active
+            active[:process].each_index do |i|
+              display "  - #{active[:process][i][:description]}" unless active[:process][i] == old_active[:process][i]
+            end
+            old_active = active
           end
         end
+        display
+        display "Complete!"
+        display
+        # finished = false
+        # until finished
+        #   display ".", false, 0
+        #   sleep 1
+        #   if active = client.app_info(app_name || app)[:active_transaction]
+        #     finished = true
+        #     display
+        #   end
+        # end
       end
         
     end
