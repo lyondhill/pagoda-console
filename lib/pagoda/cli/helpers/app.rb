@@ -59,9 +59,10 @@ module Pagoda
       end
 
       def clone
+        app = args.first || app
         id = client.app_info(app)[:id]
         display
-        git "clone git@pagodabox.com:#{id}.git #{app}"
+        git "clone git@git.pagodabox.com:#{id}.git #{app}"
         Dir.chdir(app)
         git "config --add pagoda.id #{id}"
         Dir.chdir("..")
@@ -94,19 +95,11 @@ module Pagoda
 
       def deploy
         display
-        if options[:latest]
-          client.app_deploy_latest(app)
-          display "+> deploying to latest commit point on pagodabox...", false
-          loop_transaction
-          display "+> deployed"
-          display
-        else
-          client.app_deploy(app, branch, commit)
-          display "+> deploying current branch and commit...", false
-          loop_transaction
-          display "+> deployed"
-          display
-        end
+        client.app_deploy(app, branch, commit)
+        display "+> deploying current branch and commit...", false
+        loop_transaction
+        display "+> deployed"
+        display
       end
 
       def rollback
