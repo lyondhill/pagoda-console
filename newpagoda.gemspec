@@ -4,8 +4,8 @@ require File.expand_path('../lib/pagoda/cli/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Lyon Hill", "Andrew Bennett"]
   gem.email         = ["lyon@pagodabox.com", "andrew@delorum.com"]
-  gem.description   = %q{Pagoda Box command line interface}
-  gem.summary       = %q{Pagoda Box command line interface}
+  gem.summary       = %q{Pagodabox CLI}
+  gem.description   = %q{Pagodabox User facing interface to improve workflow with pagodabx}
   gem.homepage      = "http://www.pagodabox.com"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

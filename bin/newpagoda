@@ -79,18 +79,27 @@ end
 on_error do |exception|
   if exception.class == RestClient::Unauthorized
     Pagoda::Command::Base.error "Username or Password is invald"
-  end
-  if exception.class == RestClient::ResourceNotFound
+  elsif exception.class == RestClient::ResourceNotFound
+    Pagoda::Command::Base.error "It appears we cant find your 'resource', please try again later"
+  elsif exception.class == RestClient::InternalServerError
     Pagoda::Command::Base.error "It appears pagodabox is having some trouble, please try again later"
-  end
-  if exception.class == RestClient::InternalServerError
-    Pagoda::Command::Base.error "It appears pagodabox is having some trouble, please try again later"
+  elsif exception.class == GLI::UnknownGlobalArgument or exception.class == GLI::UnknownCommandArgument or exception.class == GLI::UnknownCommand
+    Pagoda::Command::Base.error " -- #{exception.message} -- "
+  else
+    errors = [
+      "The Client has had an unexpected error:",
+      " -- #{exception.message} -- ",
+      exception.backtrace.join("\n"),
+      "Please report this error to support@pagodabox.com so we can fix it.",
+      "Thank you."
+    ]
+    Pagoda::Command::Base.error errors
   end
 
   # Error logic here
   # return false to skip default error handling
-  ENV['GLI_DEBUG'] = 'true'
-  false
+  # ENV['GLI_DEBUG'] = 'true'
+  # false
 end
 
 exit GLI.run(ARGV)

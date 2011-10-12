@@ -4,7 +4,6 @@ module Pagoda
   module Command
 
     class Base
-      GIT_REGEX = /^((git@github.com:)|(.*:)|((http|https):\/\/.*github.com\/)|(git:\/\/github.com\/))(.*)\/(.*).git$/i
       include Pagoda::Helpers
 
       class << self
@@ -13,7 +12,7 @@ module Pagoda
           username = ask "Username: "
           display "Password: ", false
           password = running_on_windows? ? ask_for_password_on_windows : ask_for_password
-          api_key =  Pagoda::Client.new(user, password).api_key
+          # api_key =  Pagoda::Client.new(user, password).api_key
           [username, password] # return
         end
 
@@ -175,9 +174,9 @@ module Pagoda
               active[:progress].each_index do |i|
                 display "  - #{active[:progress][i][:description]}" unless active[:progress][i] == old_active[:progress][i]
               end
-              break if active[:state] == "complete"
               old_active = active
             end
+            break if active[:state] == "complete"
           end
         end
         display
