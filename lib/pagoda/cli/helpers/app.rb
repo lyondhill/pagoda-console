@@ -54,30 +54,30 @@ module Pagoda
       end
 
       def init
-        id = client.app_info(app)[:id]
+        id = client.app_info(args.first || app)[:id]
         create_git_remote(id, remote)
       end
 
       def clone
-        app = args.first || app
-        id = client.app_info(app)[:id]
+        my_app = args.first || app
+        id = client.app_info(my_app)[:id]
         display
-        git "clone git@git.pagodabox.com:#{id}.git #{app}"
-        Dir.chdir(app)
+        git "clone git@git.pagodabox.com:#{id}.git #{my_app}"
+        Dir.chdir(my_app)
         git "config --add pagoda.id #{id}"
         Dir.chdir("..")
         display
-        display "+> Repo has been added. Navigate to folder #{app}."
+        display "+> Repo has been added. Navigate to folder #{my_app}."
       rescue
         error "We were not able to access that app"
       end
 
       def create
-        name = app
+        name = args.first || app
         if client.app_available?(name)
           id = client.app_create(name)[:id]
           display("Creating #{name}...", false)
-          loop_transaction
+          loop_transaction(name)
           create_git_remote(id, remote)
           display "#{name} created"
           display "----------------------------------------------------"

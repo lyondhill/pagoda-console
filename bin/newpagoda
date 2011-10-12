@@ -80,6 +80,12 @@ on_error do |exception|
   if exception.class == RestClient::Unauthorized
     Pagoda::Command::Base.error "Username or Password is invald"
   end
+  if exception.class == RestClient::ResourceNotFound
+    Pagoda::Command::Base.error "It appears pagodabox is having some trouble, please try again later"
+  end
+  if exception.class == RestClient::InternalServerError
+    Pagoda::Command::Base.error "It appears pagodabox is having some trouble, please try again later"
+  end
 
   # Error logic here
   # return false to skip default error handling

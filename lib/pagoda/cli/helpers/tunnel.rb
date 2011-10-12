@@ -11,7 +11,7 @@ module Pagoda::Command
         components.delete_if {|x| x[:cuid] != user_input }
         component = components[0]
       else
-        component = client.component_info(app, component_name)
+        component = client.component_info(app, user_input)
       end
       if component[:tunnelable]
         type = component[:_type]
